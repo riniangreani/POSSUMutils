@@ -3,7 +3,7 @@ name: Deploy Prefect flow
 on:
   push:
     branches:
-      - main
+      - prefect_deploy #TODO: Change to main
 
 jobs:
   deploy:
