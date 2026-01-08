@@ -35,10 +35,6 @@ python /arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/cre
 echo "Opening SSH tunnel to prefect server host (p1) as user $p1user"
 # open connection
 ssh -fNT -L 4200:localhost:4200 $p1user@206.12.93.32
-# set PREFECT URL
-set -a
-source automation/config.env
-set +a
 
 echo "adding RMtools[dev] to pythonpath to work with dev branch of RMtools"
 export PYTHONPATH="/arc/projects/CIRADA/polarimetry/software/RMtoolsdev/:$PYTHONPATH"

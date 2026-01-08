@@ -1,7 +1,7 @@
 import subprocess
 import time
 from print_all_open_sessions import get_open_sessions
-
+from prefect import flow
 
 def run_script_intermittently(
     script_paths, interval, max_runs=None, max_pending=20, max_running=50
@@ -80,8 +80,8 @@ def run_script_intermittently(
         print(f"Sleeping for {interval} seconds...")
         time.sleep(interval)
 
-
-if __name__ == "__main__":
+@flow(name="control_3D_pipeline")
+def main_flow():    
     # Path to the script to be run intermittently
     script_paths = [
         "possum_pipeline_control.check_status_and_launch_3Dpipeline_v2",
@@ -103,3 +103,6 @@ if __name__ == "__main__":
     run_script_intermittently(
         script_paths, interval, max_runs, max_pending, max_running
     )
+
+if __name__ == "__main__":
+    main_flow()

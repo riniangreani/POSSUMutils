@@ -9,10 +9,6 @@ p1user=$1
 echo "Opening SSH tunnel to prefect server host (p1) as $p1user"
 # open connection
 ssh -fNT -L 4200:localhost:4200 $p1user@206.12.93.32
-# set PREFECT URL
-set -a
-source automation/config.env
-set +a
 
 # Create symbolic links from the timeblocked directories in the tiledir
 python -m cirada_software.create_symlinks --tiledir /arc/projects/CIRADA/polarimetry/ASKAP/Tiles

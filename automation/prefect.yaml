@@ -1,0 +1,32 @@
+name: prefect-build
+prefect-version: 3.4.24
+
+build:
+  - prefect_docker.deployments.steps.build_docker_image:
+      id: build-image
+      requires: prefect-docker>=0.3.1
+      image_name: possum_registry/possum_image
+      tag: latest
+      dockerfile: auto
+
+push:
+  - prefect_docker.deployments.steps.push_docker_image:
+      requires: prefect-docker>=0.3.1
+      image_name: "{{ build-image.image_name }}"
+      tag: "{{ build-image.tag }}"
+
+deployments:
+  - name: 3d-pipeline
+    entrypoint: possum_pipeline_control/control_3D_pipeline.py:main_flow
+    work_pool:
+      name: possum-work-pool
+      work_queue_name: default
+      job_variables:
+        image: "{{ build-image.image }}"
+  - name: 1d-pipeline-partial-tiles
+    entrypoint: possum_pipeline_control/control_1D_pipeline_PartialTiles.py:main_flow
+    work_pool:
+      name: possum-work-pool
+      work_queue_name: default
+      job_variables:
+        image: "{{ build-image.image }}"      

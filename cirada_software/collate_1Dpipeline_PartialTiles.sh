@@ -7,11 +7,6 @@ p1user=$2
 echo "Opening SSH tunnel to prefect server host (p1) as user $p1user"
 # open connection
 ssh -fNT -L 4200:localhost:4200 $p1user@206.12.93.32
-# set PREFECT URL
-set -a
-source automation/config.env
-set +a
-
 
 # for band 1, directory is also "943MHz"
 psrecord "python /arc/projects/CIRADA/polarimetry/software/POSSUM_Polarimetry_Pipeline/pipeline/pipeline_prefect.py $workdir/config_collate_band1.ini collate" --include-children --log $workdir/psrecord.txt --plot $workdir/psrecord.png --interval 1
