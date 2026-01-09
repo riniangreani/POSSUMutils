@@ -9,12 +9,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      DATABASE_NAME: ${{ secrets.PROD_DATABASE_NAME }}
-      DATABASE_USER: ${{ secrets.PROD_DATABASE_USER }}
-      DATABASE_PASSWORD: ${{ secrets.PROD_DATABASE_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.PROD_DATABASE_HOST }}
-      DATABASE_PORT: ${{ secrets.PROD_DATABASE_PORT }}
 
     steps:
       - name: Checkout
@@ -31,6 +25,9 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      
       - name: Prefect Deploy
         env:
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}

@@ -6,6 +6,7 @@ import os
 import psycopg2
 from astropy.table import Table
 from dotenv import load_dotenv
+from prefect.blocks.system import Secret
 
 
 def rows_to_table(rows, colnames=None):
@@ -72,11 +73,11 @@ def get_database_parameters(
         load_dotenv(dotenv_path=database_config_path)
 
         return {
-            "dbname": os.getenv("DATABASE_NAME"),
-            "user": os.getenv("DATABASE_USER"),
-            "password": os.getenv("DATABASE_PASSWORD"),
-            "host": os.getenv("DATABASE_HOST"),
-            "port": os.getenv("DATABASE_PORT"),
+            "dbname": Secret.load("database-name").get(),
+            "user": Secret.load("database-user").get(),
+            "password": Secret.load("database-password").get(),
+            "host": Secret.load("database-host").get(),
+            "port": Secret.load("database-port").get(),
         }
 
 def execute_update_query(query, conn, params=None, verbose=False):
