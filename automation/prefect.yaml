@@ -6,7 +6,6 @@ build:
       id: build-image
       requires: prefect-docker>=0.3.1
       image_name: riniangreani/possumutils
-      tag: $(date +'%Y-%m-%d')
       dockerfile: auto
 
 push:
