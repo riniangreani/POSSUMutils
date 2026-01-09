@@ -4,10 +4,6 @@ echo " this script is deprecated, see 3d_pipeline_tile_download_ingest.sh instea
 
 # echo "Starting download script"
 
-# echo "Opening SSH tunnel to prefect server host (p1) as user $1"
-# # open connection
-# ssh -fNT -L 4200:localhost:4200 $1@206.12.93.32
-
 # #RMtools not used but cant hurt to add it to path
 # echo "TEMPORARILY: adding RMtools[dev] to pythonpath until new release (>v1.4.6)"
 # export PYTHONPATH="/arc/projects/CIRADA/polarimetry/software/RMtoolsdev/:$PYTHONPATH"

@@ -20,7 +20,6 @@ import os
 from dotenv import load_dotenv
 import argparse
 import gspread
-import getpass
 import numpy as np
 import subprocess
 import astropy.table as at
@@ -455,12 +454,11 @@ def launch_collate_job():
 
     session = Session()
 
-    p1user = getpass.getuser()
 
     # e.g. for band 1
     basedir = "/arc/projects/CIRADA/polarimetry/pipeline_runs/partial_tiles/943MHz/"
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/collate_1Dpipeline_PartialTiles.sh {basedir} {p1user}"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/collate_1Dpipeline_PartialTiles.sh {basedir}"
 
     print("Launching collate job")
     print(f"Command: bash {args}")

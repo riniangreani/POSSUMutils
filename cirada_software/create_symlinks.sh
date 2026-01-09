@@ -5,11 +5,6 @@ echo "====== Creating symlinks"
 # Move to the POSSUMutils directory
 cd /arc/projects/CIRADA/polarimetry/software/POSSUMutils
 
-p1user=$1
-echo "Opening SSH tunnel to prefect server host (p1) as $p1user"
-# open connection
-ssh -fNT -L 4200:localhost:4200 $p1user@206.12.93.32
-
 # Create symbolic links from the timeblocked directories in the tiledir
 python -m cirada_software.create_symlinks --tiledir /arc/projects/CIRADA/polarimetry/ASKAP/Tiles
 

@@ -19,7 +19,6 @@ python -m possum_pipeline_control.test_3dpipeline_job
 @author: Erik Osinga
 """
 
-import getpass
 from dotenv import load_dotenv
 from canfar.sessions import Session
 from possum_pipeline_control.test_database_access import (
@@ -31,10 +30,9 @@ session = Session()
 
 
 def launch_test_session(jobname="testjob"):
-    p1user = getpass.getuser()
 
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/test_3dpipeline_job.sh {p1user}"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/test_3dpipeline_job.sh"
 
     print("Launching test 3D pipeline session")
     print(f"Command: bash {args}")

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import errno
 import os
 import shutil
 import subprocess
@@ -7,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from prefect import flow, task
+from prefect.blocks.system import Secret
 
 
 @task(name="Change to downloads directory")
@@ -25,11 +27,18 @@ def stage_cadc_certificate(
 ) -> str:
     src = Path(os.path.expanduser(source_cert))
     if not src.exists():
-        raise FileNotFoundError(
-            f"Required CADC certificate not found: {src}"
-            "Please run cadc-get-cert -u <UserName> --days-valid 30 in a CANFAR interactive session "
-            "to update your CADC certificate!!!"
-        )
+        # Try the secret from prefect
+        secret_block = Secret.load("cadc-proxy-pem")
+        pem_str = secret_block.get()
+        if pem_str:
+            write_cadcproxy_pem(pem_str)
+            src = Path(os.path.expanduser(source_cert))
+        else:
+            raise FileNotFoundError(
+                f"Required CADC certificate not found: {src}"
+                "Please run cadc-get-cert -u <UserName> --days-valid 30 in a CANFAR interactive session "
+                "to update your CADC certificate!!!"
+            )
 
     # Check age, certificates are max valid for 30 days
     mtime = datetime.fromtimestamp(src.stat().st_mtime, tz=timezone.utc)
@@ -52,6 +61,29 @@ def stage_cadc_certificate(
 
     return str(dest)
 
+def write_cadcproxy_pem(content):
+    # Construct the full path using the user's home directory
+    home_dir = os.path.expanduser("~")
+    ssl_dir = os.path.join(home_dir, ".ssl")
+    file_path = os.path.join(ssl_dir, "cadcproxy.pem")
+
+    # Create the directory if it does not exist
+    if not os.path.exists(ssl_dir):
+        try:
+            os.makedirs(ssl_dir)
+            print(f"Created directory: {ssl_dir}")
+        except OSError as e:
+            # Handle potential permissions issues or race conditions
+            if e.errno != errno.EEXIST:
+                raise
+
+    # Write the content to the file
+    try:
+        with open(file_path, "w") as f:
+            f.write(content.strip()) 
+        print(f"Successfully wrote certificate to: {file_path}")
+    except IOError as e:
+        print(f"Error writing to file {file_path}: {e}")
 
 @task(name="Check for config.yml")
 def config_exists(workdir: str, config_name: str = "config.yml") -> bool:
