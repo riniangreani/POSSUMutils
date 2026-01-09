@@ -19,14 +19,14 @@ deployments:
   - name: 3d-pipeline
     entrypoint: possum_pipeline_control/control_3D_pipeline.py:main_flow
     work_pool:
-      name: possum-work-pool
+      name: Docker-pool
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"
   - name: 1d-pipeline-partial-tiles
     entrypoint: possum_pipeline_control/control_1D_pipeline_PartialTiles.py:main_flow
     work_pool:
-      name: possum-work-pool
+      name: Docker-pool
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"      
