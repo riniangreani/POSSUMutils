@@ -24,11 +24,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      
+      - name: Set date for image tag
+        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+        
       - name: Prefect Deploy
         env:
+          NOW: ${{ env.NOW }}
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
           PREFECT_API_AUTH_STRING: ${{ secrets.PREFECT_API_AUTH_STRING }}
         run: |
           pip install -r requirements.txt
-          prefect deploy --all --prefect-file automation/prefect.yaml
+          prefect deploy --all --prefect-file automation/prefect.yaml -p build-image.tag=$NOW
