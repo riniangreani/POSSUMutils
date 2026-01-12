@@ -6,8 +6,8 @@ build: null
 push: null
 pull:
   - prefect.deployments.steps.git_clone:
-      repository: https://github.com/ErikOsinga/POSSUMutils.git
-      branch: main
+      repository: https://github.com/riniangreani/POSSUMutils.git #TODO: update to real git
+      branch: prefect_deploy #TODO: update to main
 
 deployments:
   - name: 3d-pipeline
