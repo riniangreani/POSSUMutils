@@ -8,7 +8,9 @@ pull:
   - prefect.deployments.steps.git_clone:
       repository: https://github.com/riniangreani/POSSUMutils.git #TODO: update to real git
       branch: prefect_deploy #TODO: update to main
-
+  - prefect.deployments.steps.pip_install_requirements:
+      requirements_file: requirements.txt
+      
 deployments:
   - name: 3d-pipeline
     entrypoint: possum_pipeline_control/control_3D_pipeline.py:main_flow
