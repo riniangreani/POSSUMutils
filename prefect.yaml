@@ -16,7 +16,7 @@ push:
 
 pull:
   - prefect.deployments.steps.set_working_directory:
-      directory: /opt/prefect
+      directory: /opt/prefect/POSSUMutils
       
 deployments:
   - name: 3d-pipeline
