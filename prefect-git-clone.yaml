@@ -5,7 +5,7 @@ description: "Store code within git repository"
 build: null
 push: null
 pull:
-  - prefect.deployments.steps.git_clone_project:
+  - prefect.deployments.steps.git_clone:
       id: clone-step
       repository: https://github.com/riniangreani/POSSUMutils.git #TODO: update to real git
       branch: prefect_deploy #TODO: update to main
