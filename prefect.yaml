@@ -6,7 +6,7 @@ build:
       id: build-image
       requires: prefect-docker>=0.3.1
       image_name: riniangreani/possumutils
-      dockerfile: auto      
+      dockerfile: auto          
 
 push:
   - prefect_docker.deployments.steps.push_docker_image:
@@ -14,6 +14,10 @@ push:
       image_name: "{{ build-image.image_name }}"
       tag: "{{ build-image.tag }}"
 
+pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /opt/prefect
+      
 deployments:
   - name: 3d-pipeline
     entrypoint: possum_pipeline_control/control_3D_pipeline.py:main_flow
