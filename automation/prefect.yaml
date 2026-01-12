@@ -7,7 +7,6 @@ build:
       requires: prefect-docker>=0.3.1
       image_name: riniangreani/possumutils
       dockerfile: auto      
-      path: ..
 
 push:
   - prefect_docker.deployments.steps.push_docker_image:
@@ -17,14 +16,14 @@ push:
 
 deployments:
   - name: 3d-pipeline
-    entrypoint: possum_pipeline_control/control_3D_pipeline.py:main_flow
+    entrypoint: ../possum_pipeline_control/control_3D_pipeline.py:main_flow
     work_pool:
       name: docker-pool
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"
   - name: 1d-pipeline-partial-tiles
-    entrypoint: possum_pipeline_control/control_1D_pipeline_PartialTiles.py:main_flow
+    entrypoint: ../possum_pipeline_control/control_1D_pipeline_PartialTiles.py:main_flow
     work_pool:
       name: docker-pool
       work_queue_name: default
