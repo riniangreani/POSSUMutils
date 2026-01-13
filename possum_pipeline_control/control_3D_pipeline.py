@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from print_all_open_sessions import get_open_sessions
 from prefect import flow
 
@@ -61,7 +62,7 @@ def run_script_intermittently(
         if n_headless_pending < max_pending and n_headless_running < max_running:
             for script_path in script_paths:
                 print(f"Running script: {script_path}")
-                subprocess.run(["python", "-m", script_path], check=True)
+                subprocess.run(["python", "-m", script_path], check=True, stdout=sys.stdout, stderr=sys.stderr)
         else:
             if n_headless_pending >= max_pending:
                 print("Too many pending headless sessions. Skipping this run.")
