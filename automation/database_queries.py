@@ -25,7 +25,7 @@ def rows_to_table(rows, colnames=None):
 
 
 def get_database_connection(
-    test: bool, database_config_path: str
+    test: bool, database_config_path=None
 ):
     """
     Initiate a database connection.

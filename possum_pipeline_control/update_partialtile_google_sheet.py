@@ -93,8 +93,7 @@ def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
         band_number = "2"
     else:
         raise ValueError("Band must be either '943MHz' or '1367MHz'")
-
-    load_dotenv(dotenv_path="./automation/config.env")
+    
     conn = db.get_database_connection(test=False)
     ready_table = db.get_fields_ready_single_SB_pipeline(band_number, conn)
     conn.close()
