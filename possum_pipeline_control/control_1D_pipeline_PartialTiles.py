@@ -5,7 +5,7 @@ from print_all_open_sessions import get_open_sessions
 from prefect import flow
 
 def run_script_intermittently(
-    script_paths, interval, max_runs=None, max_pending=20, max_running=50, args=None
+    script_paths, max_pending=20, max_running=50, args=None
 ):
     try:
         # Get information about currently open sessions
