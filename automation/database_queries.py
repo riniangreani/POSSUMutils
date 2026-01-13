@@ -25,7 +25,7 @@ def rows_to_table(rows, colnames=None):
 
 
 def get_database_connection(
-    test: bool, database_config_path: String
+    test: bool, database_config_path: str
 ):
     """
     Initiate a database connection.
@@ -49,13 +49,11 @@ def get_database_parameters(
         if test_db_name != os.getenv('TEST_DATABASE_NAME'):
             raise ConnectionError("""Please make sure your test database is named possum_test!
                         This is to avoid accidentally using real prod database in tests.""")
-        return {
-            'dbname': os.getenv('TEST_DATABASE_NAME'),
-            'user': os.getenv('TEST_DATABASE_USER'),
-            'password': os.getenv('TEST_DATABASE_PASSWORD'),
-            'host': os.getenv('TEST_DATABASE_HOST'),
-            'port': os.getenv('TEST_DATABASE_PORT')
-        }
+        db_name = os.getenv('TEST_DATABASE_NAME')
+        db_user = os.getenv('TEST_DATABASE_USER')
+        db_pass = os.getenv('TEST_DATABASE_PASSWORD')
+        db_host = os.getenv('TEST_DATABASE_HOST')
+        db_port = os.getenv('TEST_DATABASE_PORT')
     else:
         if "test" in database_config_path.lower():
             raise ValueError(
@@ -86,18 +84,6 @@ def get_database_parameters(
             "password": db_pass,
             "host": db_host,
             "port": db_port,
-        }
-
-def execute_update_query(query, conn, params=None, verbose=False):
-    """
-    Execute an update SQL query and return the number of rows affected.
-
-    Args:
-
-            "user": Secret.load("database-user").get(),
-            "password": Secret.load("database-password").get(),
-            "host": Secret.load("database-host").get(),
-            "port": Secret.load("database-port").get(),
         }
 
 def execute_update_query(query, conn, params=None, verbose=False):
