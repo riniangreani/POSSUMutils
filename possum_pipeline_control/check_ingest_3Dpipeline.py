@@ -6,6 +6,7 @@ from possum_pipeline_control import util
 # from skaha.session import Session
 from canfar.sessions import Session
 from automation import database_queries as db
+from prefect import task
 
 session = Session()
 
@@ -24,7 +25,7 @@ If the "3d_pipeline_val" column is marked as "Good", we can launch an ingest job
 @author: Erik Osinga
 """
 
-
+@task(log_prints=True)
 def get_tiles_for_ingest(band_number, conn):
     """
     Get a list of 3D pipeline tile numbers that should be ready to be ingested.
@@ -60,7 +61,7 @@ def get_canfar_tiles(band_number):
         raise ValueError(f"Band number {band_number} not defined")
     return canfar_tilenumbers
 
-
+@task(log_prints=True)
 def launch_ingest(tilenumber, band):
     """Launch 3D pipeline ingest script"""
 
@@ -100,7 +101,7 @@ def launch_ingest(tilenumber, band):
 
     return
 
-
+@task(log_prints=True)
 def update_status(tile_number, band, status, conn):
     """
     Update the status of the specified tile in the database.
@@ -115,7 +116,7 @@ def update_status(tile_number, band, status, conn):
         tile_number, band_no, status, "3d_pipeline_ingest", conn
     )
 
-
+@task(log_prints=True, retries=3)
 def ingest_3Dpipeline(band_number=1):
     if band_number == 1:
         band = "943MHz"

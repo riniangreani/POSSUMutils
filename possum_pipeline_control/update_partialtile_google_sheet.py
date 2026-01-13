@@ -32,8 +32,9 @@ import time
 from datetime import datetime
 from pathlib import Path
 from automation import database_queries as db
+from prefect import task
 
-
+@task(log_prints=True)
 def get_sheet_table(band):
     """
     Connects to the POSSUM Status Monitor Google Sheet and returns a sub-table
@@ -76,6 +77,7 @@ def get_sheet_table(band):
     return ready_table, tile_table
 
 
+@task(log_prints=True)
 def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
     """
     Get fields ready for single SB partial tile pipeline processing from the database.
@@ -123,6 +125,7 @@ def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
     return ready_table, full_table_sheet
 
 
+@task(log_prints=True, retries=3)
 def launch_pipeline_command(fieldname, sbid):
     """
     Launches the 1D pipeline pre-or-post script for a given field and sbid.
@@ -148,6 +151,7 @@ def extract_date(entry):
         return np.nan
 
 
+@task(log_prints=True)
 def create_progress_plot(full_table):
     """to be run on p1
 
@@ -445,6 +449,7 @@ def create_progress_plot(full_table):
     plt.close()
 
 
+@task(log_prints=True)
 def launch_collate_job():
     """
     Launches the collate job for the 1D pipeline. Once per day

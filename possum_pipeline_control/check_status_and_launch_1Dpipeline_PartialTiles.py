@@ -7,6 +7,7 @@ import re
 from automation import database_queries as db
 from possum_pipeline_control import util
 from possum_pipeline_control.control_1D_pipeline_PartialTiles import get_open_sessions
+from prefect import task
 
 """
 Should be executed on p1 in this script's directory (called from control_1D_pipeline_PartialTiles.py):
@@ -35,7 +36,7 @@ Cameron is in charge of generating the source lists per partial tile and separat
 @author: Erik Osinga
 """
 
-
+@task(log_prints=True)
 def get_results_per_field_sbid_skip_edges(band_number, conn, verbose=False):
     """
     Group the tile_table by 'field_name' and 'sbid' and check the validation condition
@@ -73,6 +74,7 @@ def get_results_per_field_sbid_skip_edges(band_number, conn, verbose=False):
     return results
 
 
+@task(log_prints=True)
 def get_results_per_field_sbid(conn, band_number="1", verbose=False):
     """
     Group observation by field name and sbid
@@ -108,6 +110,7 @@ def remove_prefix(field_name):
     return re.sub(r"^(EMU_|WALLABY_)", "", field_name)
 
 
+@task(log_prints=True)
 def get_tiles_for_pipeline_run(db_conn, band_number):
     """
     Get a list of tile numbers that should be ready to be processed by the 1D pipeline
@@ -165,6 +168,7 @@ def get_tiles_for_pipeline_run(db_conn, band_number):
     )
 
 
+@task(log_prints=True)
 def get_canfar_sourcelists(band_number, local_file="./sourcelist_canfar.txt"):
     client = Client()
     # force=True to not use cache
@@ -210,6 +214,7 @@ def get_canfar_sourcelists(band_number, local_file="./sourcelist_canfar.txt"):
     return canfar_sourcelists
 
 
+@task(log_prints=True)
 def field_from_sourcelist_string(srclist_str):
     """
     Extract field ID from sourcelist string
@@ -277,6 +282,7 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
     subprocess.run(command, check=True)
 
 
+@task(log_prints=True)
 def launch_pipeline_summary(field_ID, SBid, band):
     """
     Launch the appropriate 1D pipeline summary script based on the band
@@ -315,6 +321,7 @@ def launch_pipeline_summary(field_ID, SBid, band):
     subprocess.run(command, check=True)
 
 
+@task(log_prints=True)
 def update_validation_status(
     field_name, sbid, band_number, status, database_config_path
 ):
@@ -346,6 +353,7 @@ def update_validation_status(
     return row_num
 
 
+@task(log_prints=True)
 def check_predl_job_running_with_sbid(SBnumber: str) -> bool:
     """
     Check if a pre-dl job is already running on CANFAR for the given SBnumber.
@@ -366,7 +374,7 @@ def check_predl_job_running_with_sbid(SBnumber: str) -> bool:
     else:
         return False
 
-
+@task(log_prints=True, retries=3)
 def launch_band1_1Dpipeline(database_config_path: str):
     """
     Launch a headless job to CANFAR for a 1D pipeline Partial Tile
