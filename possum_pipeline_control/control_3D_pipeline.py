@@ -80,7 +80,7 @@ def run_script_intermittently(
         print(f"Sleeping for {interval} seconds...")
         time.sleep(interval)
 
-@flow(name="control_3D_pipeline")
+@flow(name="control_3D_pipeline", log_prints=True)
 def main_flow():    
     # Path to the script to be run intermittently
     script_paths = [

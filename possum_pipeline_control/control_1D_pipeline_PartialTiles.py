@@ -75,7 +75,7 @@ def run_script_intermittently(
         print("\n ============================== \n")
         time.sleep(interval)
 
-@flow(name="control_1D_pipeline_PartialTiles")
+@flow(name="control_1D_pipeline_PartialTiles", log_prints=True)
 def main_flow():
     parser = argparse.ArgumentParser(description="Update Partial Tile Google Sheet")
     parser.add_argument(
