@@ -80,9 +80,10 @@ def stage_cadc_certificate(
         )
 
     # Copy to workdir/.ssl/cadcproxy.pem (create directory if needed)
-    dest = Path(workdir) / dest_relpath
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dest)
+    if workdir:
+        dest = Path(workdir) / dest_relpath
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
 
     return str(dest)
 
