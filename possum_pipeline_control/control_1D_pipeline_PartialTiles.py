@@ -54,8 +54,10 @@ def run_script_intermittently(
 
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while running the script: {e}")
+        raise
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        raise
 
 @flow(name="control_1D_pipeline_PartialTiles", log_prints=True)
 def main_flow():
@@ -69,10 +71,10 @@ def main_flow():
 
     # Path to the script to be run intermittently
     script_paths = [
-        "possum_pipeline_control.update_partialtile_google_sheet",  # Check POSSUM Pipeline Status sheet and create queue of jobs in POSSUM Pipeline Validation sheet.
+        "update_partialtile_google_sheet",  # Check POSSUM Pipeline Status sheet and create queue of jobs in POSSUM Pipeline Validation sheet.
         # This is done via "check_status_and_launch_1Dpipeline_PartialTiles.py 'pre'"
         # which also downloads the tiles in a CANFAR job.
-        "possum_pipeline_control.check_status_and_launch_1Dpipeline_PartialTiles",  # Check POSSUM Pipeline Validation sheet and launch jobs
+        "check_status_and_launch_1Dpipeline_PartialTiles",  # Check POSSUM Pipeline Validation sheet and launch jobs
         # ,"check_ingest_1Dpipeline_PartialTiles.py" # TODO: Check POSSUM Pipeline Validation sheet and ingest results
         # actually, Craig will validate, and Cameron will ingest into YouCat
     ]

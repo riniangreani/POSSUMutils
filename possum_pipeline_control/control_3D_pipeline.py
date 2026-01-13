@@ -70,8 +70,10 @@ def run_script_intermittently(
 
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while running the script: {e}")
+        raise
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        raise
 
 
 @flow(name="control_3D_pipeline", log_prints=True)
