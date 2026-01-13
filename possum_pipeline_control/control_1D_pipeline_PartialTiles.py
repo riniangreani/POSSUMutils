@@ -1,6 +1,6 @@
 import argparse
 import subprocess
-import time
+import traceback
 from print_all_open_sessions import get_open_sessions
 from prefect import flow
 
@@ -55,8 +55,10 @@ def run_script_intermittently(
 
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while running the script: {e}")
+        traceback.print_exc()
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        traceback.print_exc()
 
 @flow(name="control_1D_pipeline_PartialTiles", log_prints=True)
 def main_flow():
