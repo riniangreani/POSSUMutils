@@ -20,7 +20,7 @@ def run_script_intermittently(
         print(df_sessions)
         print("\n")
 
-        if df_sessions:
+        if len(df_sessions) > 0:
             # Count the number of headless sessions with status 'Pending'
             mask_pending = (df_sessions["type"] == "headless") & (
                 df_sessions["status"] == "Pending"
