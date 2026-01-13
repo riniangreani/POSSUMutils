@@ -7,7 +7,7 @@ import re
 from automation import database_queries as db
 from possum_pipeline_control import util
 from possum_pipeline_control.control_1D_pipeline_PartialTiles import get_open_sessions
-from prefect import task
+from prefect import task, flow
 
 """
 Should be executed on p1 in this script's directory (called from control_1D_pipeline_PartialTiles.py):
@@ -374,7 +374,7 @@ def check_predl_job_running_with_sbid(SBnumber: str) -> bool:
     else:
         return False
 
-@task(log_prints=True, retries=3)
+@flow(log_prints=True, retries=3)
 def launch_band1_1Dpipeline(database_config_path: str):
     """
     Launch a headless job to CANFAR for a 1D pipeline Partial Tile

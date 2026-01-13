@@ -32,7 +32,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from automation import database_queries as db
-from prefect import task
+from prefect import task, flow
 
 @task(log_prints=True)
 def get_sheet_table(band):
@@ -125,7 +125,7 @@ def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
     return ready_table, full_table_sheet
 
 
-@task(log_prints=True, retries=3)
+@flow(log_prints=True, retries=3)
 def launch_pipeline_command(fieldname, sbid):
     """
     Launches the 1D pipeline pre-or-post script for a given field and sbid.

@@ -6,7 +6,7 @@ from possum_pipeline_control import util
 # from skaha.session import Session
 from canfar.sessions import Session
 from automation import database_queries as db
-from prefect import task
+from prefect import task, flow
 
 session = Session()
 
@@ -42,7 +42,7 @@ def get_tiles_for_ingest(band_number, conn):
     # Find the tiles that satisfy the conditions
     return db.get_tiles_for_ingest(band_number, conn)
 
-
+@task(log_prints=True)
 def get_canfar_tiles(band_number):
     client = Client()
     # force=True to not use cache
@@ -116,7 +116,7 @@ def update_status(tile_number, band, status, conn):
         tile_number, band_no, status, "3d_pipeline_ingest", conn
     )
 
-@task(log_prints=True, retries=3)
+@flow(log_prints=True, retries=3)
 def ingest_3Dpipeline(band_number=1):
     if band_number == 1:
         band = "943MHz"
