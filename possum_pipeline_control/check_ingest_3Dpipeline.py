@@ -177,8 +177,8 @@ def ingest_3Dpipeline(band_number=1):
     print("3D pipeline ingest check complete.")
     print("\n")
 
-
-if __name__ == "__main__":
+@flow(log_prints=True)
+def main_flow():
     parser = argparse.ArgumentParser(
         description="Checks POSSUM validation status ('POSSUM Pipeline validation' google sheet) if 3D pipeline outputs can be ingested."
     )
@@ -206,3 +206,7 @@ if __name__ == "__main__":
 
     ## Assumes this script is called by run_3D_pipeline_intermittently.py
     ingest_3Dpipeline(band_number=band_number)
+
+
+if __name__ == "__main__":
+    main_flow()

@@ -64,7 +64,7 @@ def run_script_intermittently(
                 # Dynamically import the module
                 module = __import__(script_path, fromlist=["main"])
                 # Call the main flow
-                module.main()    
+                module.main_flow()    
         else:
             if n_headless_pending >= max_pending:
                 print("Too many pending headless sessions. Skipping this run.")

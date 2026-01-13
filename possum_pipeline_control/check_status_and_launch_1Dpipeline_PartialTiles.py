@@ -555,7 +555,8 @@ def launch_band1_1Dpipeline(database_config_path: str):
         )
 
 
-if __name__ == "__main__":
+@flow(log_prints=True)
+def main_flow():
     # DEPRECATED:
     # on p1, token for accessing Erik's google sheets
     # consider chmod 600 <file> to prevent access
@@ -572,3 +573,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     launch_band1_1Dpipeline(args.database_config_path)
+    
+
+if __name__ == "__main__":
+    main_flow()

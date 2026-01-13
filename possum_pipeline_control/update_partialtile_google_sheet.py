@@ -493,9 +493,10 @@ def launch_collate_job():
     print(
         f"Check logs at https://ws-uv.canfar.net/skaha/v1/session/{session_id[0]}?view=logs"
     )
+    
 
-
-if __name__ == "__main__":
+@flow(log_prints=True)
+def main_flow():
     parser = argparse.ArgumentParser(description="Update Partial Tile Google Sheet")
     parser.add_argument(
         "--band",
@@ -513,8 +514,9 @@ if __name__ == "__main__":
     band = args.band
 
     # load env for google spreadsheet constants
-    load_dotenv(dotenv_path=args.database_config_path)
-    Google_API_token = os.getenv("POSSUM_STATUS_SHEET")
+    if args.database_config_path:
+        load_dotenv(dotenv_path=args.database_config_path)
+        # Google_API_token = os.getenv("POSSUM_STATUS_SHEET")
     # consider chmod 600 <POSSUM_STATUS_TOKEN_FILE> to prevent access!!!
 
     # Get fields ready for processing according to the AUSSRC database.
@@ -556,3 +558,7 @@ if __name__ == "__main__":
         # update_status_spreadsheet(fieldname, sbid, band, Google_API_token, status_to_put, 'single_SB_1D_pipeline')
 
         break  # only do one every time the script is called
+
+
+if __name__ == "__main__":
+    main_flow()

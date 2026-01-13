@@ -390,7 +390,8 @@ def launch_band1_3Dpipeline(database_config_path):
     print("\n")
 
 
-if __name__ == "__main__":
+@flow(log_prints=True)
+def main_flow():
     parser = argparse.ArgumentParser(
         description="Checks POSSUM validation status ('POSSUM Pipeline validation' google sheet) if 3D pipeline outputs can be ingested."
     )
@@ -401,3 +402,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     launch_band1_3Dpipeline(args.database_config_path)
+
+
+if __name__ == "__main__":
+    main_flow()

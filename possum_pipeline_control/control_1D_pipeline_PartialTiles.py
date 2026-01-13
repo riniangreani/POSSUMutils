@@ -43,9 +43,9 @@ def run_script_intermittently(
                 module = __import__(script_path, fromlist=["main"])
                 # Call the main flow
                 if args.database_config_path is not None:
-                    module.main(database_config_path=args.database_config_path)
+                    module.main_flow(database_config_path=args.database_config_path)
                 else:
-                    module.main()    
+                    module.main_flow()    
         else:
             if n_headless_pending >= max_pending:
                 print("Too many pending headless sessions. Skipping this run.")
