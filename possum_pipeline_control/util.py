@@ -84,8 +84,7 @@ def stage_cadc_certificate(
         dest = Path(workdir) / dest_relpath
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
-
-    return str(dest)
+        return str(dest)
 
 def write_cadcproxy_pem(content):
     # Construct the full path using the user's home directory
