@@ -1,6 +1,5 @@
 import argparse
 import subprocess
-import sys
 from print_all_open_sessions import get_open_sessions
 from prefect import flow
 
@@ -40,13 +39,13 @@ def run_script_intermittently(
         if n_headless_pending < max_pending and n_headless_running < max_running:
             for script_path in script_paths:
                 print(f"Running script: {script_path}")
-                cmd_list = ["python", "-m", script_path]
+                # Dynamically import the module
+                module = __import__(script_path, fromlist=["main"])
+                # Call the main flow
                 if args.database_config_path is not None:
-                    cmd_list += [
-                        "--database_config_path",
-                        args.database_config_path,
-                    ]
-                subprocess.run(cmd_list, check=True, stdout=sys.stdout, stderr=sys.stderr)
+                    module.main(database_config_path=args.database_config_path)
+                else:
+                    module.main()    
         else:
             if n_headless_pending >= max_pending:
                 print("Too many pending headless sessions. Skipping this run.")
