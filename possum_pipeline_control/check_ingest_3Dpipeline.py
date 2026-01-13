@@ -189,13 +189,19 @@ if __name__ == "__main__":
         default=1,
         help="Band number to process: 1 for 943MHz or 2 for 1367MHz",
     )
+    parser.add_argument(
+        "--database_config_path",
+        type=str,
+        help="Path to .env file with database connection parameters.",
+    )
     args = parser.parse_args()
 
     # Band number 1 (943MHz) or 2 ("1367MHz")
     band_number = args.band_number
 
     # load env for google spreadsheet constants
-    load_dotenv(dotenv_path="./automation/config.env")
+    if args.database_config_path:
+        load_dotenv(dotenv_path=args.database_config_path)
 
     ## Assumes this script is called by run_3D_pipeline_intermittently.py
     ingest_3Dpipeline(band_number=band_number)

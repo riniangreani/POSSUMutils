@@ -22,7 +22,7 @@ into time-blocked directories.
 
 @author: Erik Osinga
 """
-
+import argparse
 import os
 from dotenv import load_dotenv
 from vos import Client
@@ -302,7 +302,7 @@ def needs_prefect_sqlite_backup(
     return newest_mtime < cutoff
 
 
-def launch_band1_3Dpipeline():
+def launch_band1_3Dpipeline(database_config_path):
     """
     Check for Band 1 tiles that are ready to be processed with the 3D pipeline and launch the pipeline for the first available tile.
     3D pipeline can be launched if the tile is processed by AUSsrc (aus_src column not empty) but 3D pipeline not yet run (3d_pipeline column empty).
@@ -335,7 +335,7 @@ def launch_band1_3Dpipeline():
 
     # Check database for band 1 tiles that have been processed by AUSSRC
     # but not yet processed with 3D pipeline
-    conn = db.get_database_connection(test=False)
+    conn = db.get_database_connection(test=False, database_config_path=database_config_path)
     # We are getting the tiles from the DB instead of the sheet now
     tile_numbers = db.get_tiles_for_pipeline_run(conn, band_number=1)
     # tile_numbers is a list of single-element tuples, convert to 1D list
@@ -391,6 +391,13 @@ def launch_band1_3Dpipeline():
 
 
 if __name__ == "__main__":
-    # load env for google spreadsheet constants
-    load_dotenv(dotenv_path="./automation/config.env")
-    launch_band1_3Dpipeline()
+    parser = argparse.ArgumentParser(
+        description="Checks POSSUM validation status ('POSSUM Pipeline validation' google sheet) if 3D pipeline outputs can be ingested."
+    )
+    parser.add_argument(
+        "--database_config_path",
+        type=str,
+        help="Path to .env file with database connection parameters.",
+    )
+    args = parser.parse_args()
+    launch_band1_3Dpipeline(args.database_config_path)

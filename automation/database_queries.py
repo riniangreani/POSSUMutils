@@ -25,7 +25,7 @@ def rows_to_table(rows, colnames=None):
 
 
 def get_database_connection(
-    test: bool, database_config_path: str = "automation/config.env"
+    test: bool, database_config_path: String
 ):
     """
     Initiate a database connection.
@@ -37,7 +37,7 @@ def get_database_connection(
 
 
 def get_database_parameters(
-    test=False, database_config_path: str = "automation/config.env"
+    test=False, database_config_path=None
 ):
     """
     Get database parameters from env file (test.env for test, config.env otherwise)
@@ -57,23 +57,43 @@ def get_database_parameters(
             'port': os.getenv('TEST_DATABASE_PORT')
         }
     else:
-        print(f"Attempting to load database config from {database_config_path}")
-
         if "test" in database_config_path.lower():
             raise ValueError(
                 "Database config path should not point to a test environment when test=False"
             )
-
-        if not os.path.exists(database_config_path):
-            raise FileNotFoundError(
-                f"Database config file not found at {database_config_path}. Current working directory: {os.getcwd()}"
-            )
-
-        # Get database connection details from config.env file
-        load_dotenv(dotenv_path=database_config_path)
+        
+        if database_config_path:
+            # Get database connection details from config.env file
+            print(f"Loading database config from {database_config_path}")
+            load_dotenv(dotenv_path=database_config_path)
+            db_name = os.getenv("DATABASE_NAME")
+            db_user = os.getenv("DATABASE_USER")
+            db_pass = os.getenv("DATABASE_PASSWORD")
+            db_host = os.getenv("DATABASE_HOST")
+            db_port = os.getenv("DATABASE_PORT")
+        else: 
+            # Load Prefect secrets
+            print("Loading database config from Prefect secrets")
+            db_name = Secret.load("database-name").get()
+            db_user = Secret.load("database-user").get()
+            db_pass = Secret.load("database-password").get()
+            db_host = Secret.load("database-host").get()
+            db_port = Secret.load("database-port").get()    
 
         return {
-            "dbname": Secret.load("database-name").get(),
+            "dbname": db_name,
+            "user": db_user,
+            "password": db_pass,
+            "host": db_host,
+            "port": db_port,
+        }
+
+def execute_update_query(query, conn, params=None, verbose=False):
+    """
+    Execute an update SQL query and return the number of rows affected.
+
+    Args:
+
             "user": Secret.load("database-user").get(),
             "password": Secret.load("database-password").get(),
             "host": Secret.load("database-host").get(),

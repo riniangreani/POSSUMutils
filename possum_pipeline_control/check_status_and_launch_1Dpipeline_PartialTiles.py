@@ -316,7 +316,7 @@ def launch_pipeline_summary(field_ID, SBid, band):
 
 
 def update_validation_status(
-    field_name, sbid, band_number, status, database_config_path="automation/config.env"
+    field_name, sbid, band_number, status, database_config_path
 ):
     """
     Update the status of the specified partial tile or all rows for a given field_name and sbid.
@@ -367,7 +367,7 @@ def check_predl_job_running_with_sbid(SBnumber: str) -> bool:
         return False
 
 
-def launch_band1_1Dpipeline(database_config_path: str = "automation/config.env"):
+def launch_band1_1Dpipeline(database_config_path: str):
     """
     Launch a headless job to CANFAR for a 1D pipeline Partial Tile
     """
@@ -559,7 +559,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--database_config_path",
         type=str,
-        default="automation/config.env",
         help="Path to .env file with database connection parameters.",
     )
     args = parser.parse_args()

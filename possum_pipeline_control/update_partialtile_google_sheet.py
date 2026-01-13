@@ -501,7 +501,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--database_config_path",
         type=str,
-        default="automation/config.env",
         help="Path to .env file with database connection parameters.",
     )
     args = parser.parse_args()
