@@ -7,6 +7,7 @@ from possum_pipeline_control import util
 from canfar.sessions import Session
 from automation import database_queries as db
 from prefect import task, flow
+from prefect.cache_policies import NO_CACHE
 
 session = Session()
 
@@ -25,7 +26,7 @@ If the "3d_pipeline_val" column is marked as "Good", we can launch an ingest job
 @author: Erik Osinga
 """
 
-@task(log_prints=True)
+@task(log_prints=True, cache_policy=NO_CACHE)
 def get_tiles_for_ingest(band_number, conn):
     """
     Get a list of 3D pipeline tile numbers that should be ready to be ingested.
@@ -101,7 +102,7 @@ def launch_ingest(tilenumber, band):
 
     return
 
-@task(log_prints=True)
+@task(log_prints=True, cache_policy=NO_CACHE)
 def update_status(tile_number, band, status, conn):
     """
     Update the status of the specified tile in the database.

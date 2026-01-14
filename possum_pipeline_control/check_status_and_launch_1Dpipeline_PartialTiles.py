@@ -8,6 +8,7 @@ from automation import database_queries as db
 from possum_pipeline_control import util
 from possum_pipeline_control.control_1D_pipeline_PartialTiles import get_open_sessions
 from prefect import task, flow
+from prefect.cache_policies import NO_CACHE
 
 """
 Should be executed on p1 in this script's directory (called from control_1D_pipeline_PartialTiles.py):
@@ -36,7 +37,7 @@ Cameron is in charge of generating the source lists per partial tile and separat
 @author: Erik Osinga
 """
 
-@task(log_prints=True)
+@task(log_prints=True, cache_policy=NO_CACHE)
 def get_results_per_field_sbid_skip_edges(band_number, conn, verbose=False):
     """
     Group the tile_table by 'field_name' and 'sbid' and check the validation condition
@@ -74,7 +75,7 @@ def get_results_per_field_sbid_skip_edges(band_number, conn, verbose=False):
     return results
 
 
-@task(log_prints=True)
+@task(log_prints=True, cache_policy=NO_CACHE)
 def get_results_per_field_sbid(conn, band_number="1", verbose=False):
     """
     Group observation by field name and sbid
@@ -110,7 +111,7 @@ def remove_prefix(field_name):
     return re.sub(r"^(EMU_|WALLABY_)", "", field_name)
 
 
-@task(log_prints=True)
+@task(log_prints=True, cache_policy=NO_CACHE)
 def get_tiles_for_pipeline_run(db_conn, band_number):
     """
     Get a list of tile numbers that should be ready to be processed by the 1D pipeline
