@@ -54,13 +54,13 @@ def get_database_parameters(
         db_pass = os.getenv('TEST_DATABASE_PASSWORD')
         db_host = os.getenv('TEST_DATABASE_HOST')
         db_port = os.getenv('TEST_DATABASE_PORT')
-    else:
-        if "test" in database_config_path.lower():
-            raise ValueError(
-                "Database config path should not point to a test environment when test=False"
-            )
-        
-        if database_config_path:
+    else:        
+        if database_config_path:            
+            if "test" in database_config_path.lower():
+                raise ValueError(
+                    "Database config path should not point to a test environment when test=False"
+                )
+            
             # Get database connection details from config.env file
             print(f"Loading database config from {database_config_path}")
             load_dotenv(dotenv_path=database_config_path)
