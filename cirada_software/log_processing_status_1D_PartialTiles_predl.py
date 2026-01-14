@@ -39,14 +39,8 @@ if __name__ == "__main__":
     SBID = args.SB_num
     band = args.band
     database_config_path = args.database_config_path
-
-    load_dotenv(dotenv_path=database_config_path)
     Google_API_token = os.getenv("POSSUM_STATUS_TOKEN")
-    if not os.path.isfile(Google_API_token):
-        raise FileNotFoundError(
-            f"Google API token file not found at {Google_API_token}"
-        )
-
+    
     # update the status in Cameron's spreadsheet
     status_to_put = "PartialTiles - Running"
 

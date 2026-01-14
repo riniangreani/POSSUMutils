@@ -4,6 +4,7 @@ import os
 import errno
 import shutil
 from datetime import datetime, timedelta, timezone
+from dotenv import load_dotenv
 from pathlib import Path
 from prefect import task
 from prefect.blocks.system import Secret
@@ -87,16 +88,68 @@ def stage_cadc_certificate(
         return str(dest)
 
 def write_cadcproxy_pem(content):
+    """
+    Write a cadcproxy.pem file in .ssl directory 
+    using Prefect secret 'cadc-proxy-pem'.
+    """
     # Construct the full path using the user's home directory
     home_dir = os.path.expanduser("~")
     ssl_dir = os.path.join(home_dir, ".ssl")
     file_path = os.path.join(ssl_dir, "cadcproxy.pem")
 
+    write_to_file(ssl_dir, file_path, 'cadc-proxy-pem')
+
+def initiate_possum_status_sheet_and_token(database_config_path=None):
+    """
+    Get the POSSUM status token from the environment or 
+    initiate it from Prefect secret if not present.
+    """
+    if database_config_path:
+        load_dotenv(dotenv_path=database_config_path)
+        # first, look for POSSUM_STATUS_TOKEN
+        Google_API_token = os.getenv("POSSUM_STATUS_TOKEN")
+        if not os.path.isfile(Google_API_token):
+            raise FileNotFoundError(
+                f"Google API token file not found at {Google_API_token}"
+            )
+        Google_API_token = os.getenv("POSSUM_STATUS_SHEET")
+        if not os.path.isfile(Google_API_token):
+            raise FileNotFoundError(
+                f"Google API token file not found at {Google_API_token}"
+            )
+        # now, look for POSSUM_STATUS_SHEET
+        possum_status_sheet = os.getenv("POSSUM_STATUS_SHEET")
+        if not possum_status_sheet:
+            raise ValueError(
+                "POSSUM_STATUS_SHEET environment variable not set"
+            )
+    else:
+        # load secrets into environment variables
+        Google_API_token = write_possum_token_file()
+        os.environ["POSSUM_STATUS_TOKEN"] = Google_API_token
+        possum_status_sheet = Secret.load("possum-status-sheet").get()
+        os.environ["POSSUM_STATUS_SHEET"] = possum_status_sheet
+
+    return Google_API_token  
+    
+def write_possum_token_file():
+    """
+    Write a Google API json token file to access the POSSUM status sheet
+    using Prefect secret 'possum-status-token'.
+    """
+    # Construct the full path using the user's home directory
+    home_dir = os.path.expanduser("~")
+    ssl_dir = os.path.join(home_dir, ".ssl")
+    file_path = os.path.join(ssl_dir, "possum.json")
+ 
+    return write_to_file(ssl_dir, file_path, 'possum-status-token')
+
+def write_to_file(dir, file_path, secret_name):
     # Create the directory if it does not exist
-    if not os.path.exists(ssl_dir):
+    if not os.path.exists(dir):
         try:
-            os.makedirs(ssl_dir)
-            print(f"Created directory: {ssl_dir}")
+            os.makedirs(dir)
+            print(f"Created directory: {dir}")
         except OSError as e:
             # Handle potential permissions issues or race conditions
             if e.errno != errno.EEXIST:
@@ -105,12 +158,14 @@ def write_cadcproxy_pem(content):
     # Write the content to the file
     try:
         with open(file_path, "w") as f:
-            f.write(content.strip()) 
-        print(f"Successfully wrote certificate to: {file_path}")
+            secret_block = Secret.load(secret_name)
+            secret_str = secret_block.get()
+            if secret_str:
+                f.write(secret_str.strip()) 
+        print(f"Successfully wrote to: {file_path}")
     except IOError as e:
         print(f"Error writing to file {file_path}: {e}")
-
-
+        raise
 
 class TemporaryWorkingDirectory:
     """Context manager to temporarily change the current working directory."""

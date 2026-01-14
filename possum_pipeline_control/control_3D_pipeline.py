@@ -1,6 +1,8 @@
+import argparse
 import subprocess
 from print_all_open_sessions import get_open_sessions
 from prefect import flow
+from . import util
 
 def run_script_intermittently(
     script_paths, max_pending=20, max_running=50
@@ -81,6 +83,16 @@ def run_script_intermittently(
 
 @flow(name="control_3D_pipeline", log_prints=True)
 def main_flow():    
+    parser = argparse.ArgumentParser(description="3D pipeline arguments")
+    parser.add_argument(
+        "--database_config_path",
+        type=str,
+        help="Path to .env file with database connection parameters.",
+    )
+    args = parser.parse_args()
+
+    # Load POSSUM status token from environment variables if database_config_path is specified, otherwise load Prefect secrets
+    util.initiate_possum_status_sheet_and_token(args.database_config_path)
     # Path to the script to be run intermittently
     script_paths = [
         "possum_pipeline_control.check_status_and_launch_3Dpipeline_v2",

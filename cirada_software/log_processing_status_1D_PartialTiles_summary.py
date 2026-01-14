@@ -104,7 +104,6 @@ def update_status_spreadsheet(
 
     # Authenticate and grab the spreadsheet
     gc = gspread.service_account(filename=Google_API_token)
-    load_dotenv(dotenv_path=database_config_path)
     ps = gc.open_by_url(os.getenv("POSSUM_STATUS_SHEET"))
 
     # Select the worksheet for the given band number
