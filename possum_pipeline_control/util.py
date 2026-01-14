@@ -156,7 +156,7 @@ def write_to_file(dir, file_path, secret_name):
             secret_block = Secret.load(secret_name)
             secret_str = secret_block.get()
             if secret_str:
-                f.write(secret_str.strip()) 
+                f.write(secret_str) 
         print(f"Successfully wrote to: {file_path}")
     except IOError as e:
         print(f"Error writing to file {file_path}: {e}")
