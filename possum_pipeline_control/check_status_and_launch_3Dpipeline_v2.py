@@ -302,7 +302,7 @@ def needs_prefect_sqlite_backup(
     return newest_mtime < cutoff
 
 @flow(retries=3, log_prints=True)
-def launch_band1_3Dpipeline(database_config_path):
+def launch_band1_3Dpipeline(database_config_path=None):
     """
     Check for Band 1 tiles that are ready to be processed with the 3D pipeline and launch the pipeline for the first available tile.
     3D pipeline can be launched if the tile is processed by AUSsrc (aus_src column not empty) but 3D pipeline not yet run (3d_pipeline column empty).

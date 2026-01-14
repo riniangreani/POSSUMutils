@@ -375,7 +375,7 @@ def check_predl_job_running_with_sbid(SBnumber: str) -> bool:
         return False
 
 @flow(log_prints=True, retries=3)
-def launch_band1_1Dpipeline(database_config_path: str):
+def launch_band1_1Dpipeline(database_config_path=None):
     """
     Launch a headless job to CANFAR for a 1D pipeline Partial Tile
     """

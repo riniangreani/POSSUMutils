@@ -201,8 +201,7 @@ def main_flow():
     band_number = args.band_number
 
     # load env for google spreadsheet constants
-    if args.database_config_path:
-        load_dotenv(dotenv_path=args.database_config_path)
+    util.initiate_possum_status_sheet_and_token(args.database_config_path)
 
     ## Assumes this script is called by run_3D_pipeline_intermittently.py
     ingest_3Dpipeline(band_number=band_number)
