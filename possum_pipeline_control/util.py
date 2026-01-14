@@ -112,11 +112,6 @@ def initiate_possum_status_sheet_and_token(database_config_path=None):
             raise FileNotFoundError(
                 f"Google API token file not found at {Google_API_token}"
             )
-        Google_API_token = os.getenv("POSSUM_STATUS_SHEET")
-        if not os.path.isfile(Google_API_token):
-            raise FileNotFoundError(
-                f"Google API token file not found at {Google_API_token}"
-            )
         # now, look for POSSUM_STATUS_SHEET
         possum_status_sheet = os.getenv("POSSUM_STATUS_SHEET")
         if not possum_status_sheet:
