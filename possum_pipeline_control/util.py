@@ -2,6 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 import os
 import errno
+import json
 import shutil
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
@@ -156,7 +157,11 @@ def write_to_file(dir, file_path, secret_name):
             secret_block = Secret.load(secret_name)
             secret_str = secret_block.get()
             if secret_str:
-                f.write(secret_str) 
+                if isinstance(secret_str, dict):
+                    # json file
+                    json.dump(secret_str, f)
+                else:    
+                    f.write(secret_str.strip()) 
         print(f"Successfully wrote to: {file_path}")
     except IOError as e:
         print(f"Error writing to file {file_path}: {e}")
