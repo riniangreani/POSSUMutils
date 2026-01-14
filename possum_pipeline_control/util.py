@@ -138,7 +138,8 @@ def write_possum_token_file():
     ssl_dir = os.path.join(home_dir, ".ssl")
     file_path = os.path.join(ssl_dir, "possum.json")
  
-    return write_to_file(ssl_dir, file_path, 'possum-status-token')
+    write_to_file(ssl_dir, file_path, 'possum-status-token')
+    return file_path
 
 def write_to_file(dir, file_path, secret_name):
     # Create the directory if it does not exist
