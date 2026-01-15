@@ -17,7 +17,7 @@ out="$OUTDIR/prefect-$ts.sql"
 
 echo "Starting PostgreSQL backup..."
 # Run pg_dump inside the container and write output to host path
-docker exec "$PG_CONTAINER" bash -c "pg_dump -U $PGUSER $PGDATABASE > "$out""
+pg_dump -U $PGUSER $PGDATABASE > "$out"
 
 echo "Backup written to: $out"
 
