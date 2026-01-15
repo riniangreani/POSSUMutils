@@ -1,26 +1,37 @@
-### Script to make a one-shot backup of the prefect databas
-### will be saved with timestamp, as e.g. prefect-2025-12-16T142502Z.db
+### Script to make a one-shot backup of the prefect database
+### will be saved with timestamp, as e.g. prefect-2025-12-16T142502Z.sql
 
+# --- PostgreSQL connection settings ---
+PGHOST="localhost"
+PGPORT="5432"
+PGDATABASE="prefect"
+PGUSER="prefect"
+# Prefer .pgpass or env var over hardcoding
+# export PGPASSWORD="secret"
 
-DB="$HOME/.prefect/prefect.db"
+# --- Backup output ---
 OUTDIR="$HOME/prefect-backups"
 mkdir -p "$OUTDIR"
 
 ts="$(date -u +%Y-%m-%dT%H%M%SZ)"
-out="$OUTDIR/prefect-$ts.db"
+out="$OUTDIR/prefect-$ts.sql"
 
-sqlite3 "$DB" <<SQL
-.timeout 10000
-.backup '$out'
-SQL
+echo "Starting PostgreSQL backup..."
 
-# Optional: verify the backup is sane
-sqlite3 "$out" "PRAGMA integrity_check;"
+pg_dump \
+  --host="$PGHOST" \
+  --port="$PGPORT" \
+  --username="$PGUSER" \
+  --format=plain \
+  --no-owner \
+  --no-privileges \
+  "$PGDATABASE" > "$out"
+
 echo "Backup written to: $out"
 
-# Then copy the backup to CANFAR
+# --- Copy to CANFAR ---
 echo "Copying the backup to CANFAR..."
-vcp $out arc:projects/CIRADA/polarimetry/software/prefect-backups
+vcp "$out" arc:projects/CIRADA/polarimetry/software/prefect-backups
 
-
+echo "Backup completed successfully"
 
