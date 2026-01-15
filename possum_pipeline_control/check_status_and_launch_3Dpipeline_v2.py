@@ -272,7 +272,7 @@ def needs_prefect_sqlite_backup(
     *,
     max_age_days: int = 14,
     backups_subdir: str = "prefect-backups",
-    suffix: str = ".db",
+    suffix: str = ".sql",
 ) -> bool:
     """
     Check for Prefect SQLite backup files in <home_dir>/<backups_subdir>/.
