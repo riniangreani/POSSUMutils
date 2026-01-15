@@ -1,6 +1,6 @@
 prefect-version: null
 name: null
-description: "Store code within git repository"
+description: "Deploy prefect flows with the latest POSSUM code from git."
 
 build: null
 push: null
@@ -30,6 +30,7 @@ deployments:
         image: "{{ build-image.image }}"
   - name: refresh-cadc-proxy-pem
     entrypoint: automation/prefect/refresh_cadc_proxy_pem.py:main
+    description: 'Handy script to manually refresh cadcproxy.pem from Prefect secret if needed.'
     work_pool:
       name: local-pool
       work_queue_name: default
