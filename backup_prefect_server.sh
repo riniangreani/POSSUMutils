@@ -9,7 +9,7 @@ PGDATABASE="prefect"
 PGUSER="prefect"
 
 # --- Backup output ---
-OUTDIR="$HOME/prefect-backups"
+OUTDIR="/var/backups/prefect-backups"
 mkdir -p "$OUTDIR"
 
 ts="$(date -u +%Y-%m-%dT%H%M%SZ)"
