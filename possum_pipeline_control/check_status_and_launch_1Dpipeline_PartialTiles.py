@@ -215,7 +215,6 @@ def get_canfar_sourcelists(band_number, local_file="./sourcelist_canfar.txt"):
     return canfar_sourcelists
 
 
-@task(log_prints=True)
 def field_from_sourcelist_string(srclist_str):
     """
     Extract field ID from sourcelist string
