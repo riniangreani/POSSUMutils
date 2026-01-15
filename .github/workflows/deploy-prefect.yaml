@@ -36,4 +36,4 @@ jobs:
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
           PREFECT_API_AUTH_STRING: ${{ secrets.PREFECT_API_AUTH_STRING }}
         run: |
-          prefect deploy --all --prefect-file prefect-git-clone.yaml build-image.tag=$NOW
+          prefect deploy --all --prefect-file automation/prefect/prefect-git-clone.yaml build-image.tag=$NOW

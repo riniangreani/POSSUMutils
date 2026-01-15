@@ -15,6 +15,9 @@ Utility methods shared across the scripts
 """
 
 
+update_cadc_proxy_msg = """Please run cadc-get-cert -u <UserName> --days-valid 30 in a CANFAR interactive session 
+                and update Prefect secret 'cadc-proxy-pem' with the content to update your CADC certificate!!!"""
+
 def get_band_number(band: str) -> str:
     """
     Convert band string to band number.
@@ -65,21 +68,21 @@ def stage_cadc_certificate(
         pem_str = secret_block.get()
         if pem_str:
             write_cadcproxy_pem(pem_str)
-            src = Path(os.path.expanduser(source_cert))
         else:
             raise FileNotFoundError(
-                f"Required CADC certificate not found: {src}"
-                "Please run cadc-get-cert -u <UserName> --days-valid 30 in a CANFAR interactive session "
-                "to update your CADC certificate!!!"
+                f"Required CADC certificate not found: {src}. {update_cadc_proxy_msg}"                
             )
-
-    # Check age, certificates are max valid for 30 days
-    mtime = datetime.fromtimestamp(src.stat().st_mtime, tz=timezone.utc)
-    if datetime.now(timezone.utc) - mtime > timedelta(days=max_age_days):
-        raise ValueError(
-            "Please run cadc-get-cert -u <UserName> --days-valid 30 in a CANFAR interactive session "
-            "to update your CADC certificate!!!"
-        )
+    else:
+        # Check age, certificates are max valid for 30 days
+        mtime = datetime.fromtimestamp(src.stat().st_mtime, tz=timezone.utc)
+        if datetime.now(timezone.utc) - mtime > timedelta(days=max_age_days):
+            # Delete expired certificate so we auto load a new one next time
+            print('Deleting stale cadcproxy.pem file..')
+            os.remove(src)
+            # Prompt user to rewrite a new secret
+            raise ValueError(
+                f"CADC certificate has expired and been deleted! {update_cadc_proxy_msg}"
+            )
 
     # Copy to workdir/.ssl/cadcproxy.pem (create directory if needed)
     if workdir:
@@ -87,6 +90,8 @@ def stage_cadc_certificate(
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
         return str(dest)
+    
+    return dest_relpath
 
 def write_cadcproxy_pem(content):
     """

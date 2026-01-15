@@ -28,3 +28,10 @@ deployments:
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"
+  - name: refresh-cadc-proxy-pem
+    entrypoint: automation/prefect/refresh_cadc_proxy_pem.py:main
+    work_pool:
+      name: local-pool
+      work_queue_name: default
+      job_variables:
+        image: "{{ build-image.image }}"      
