@@ -2,24 +2,20 @@
 ### will be saved with timestamp, as e.g. prefect-2025-12-16T142502Z.sql
 
 # --- PostgreSQL connection settings ---
-PG_CONTAINER="postgres"            # name of the Postgres container
-PGHOST="localhost"
-PGPORT="5432"
 PGDATABASE="prefect"
 PGUSER="prefect"
 
-# --- Backup output ---
-OUTDIR="/var/backups/prefect-backups"
-mkdir -p "$OUTDIR"
+# --- Backup output to host ---
+OUTDIR="~/prefect-backups"
 
 ts="$(date -u +%Y-%m-%dT%H%M%SZ)"
 out="$OUTDIR/prefect-$ts.sql"
 
 echo "Starting PostgreSQL backup..."
 # Run pg_dump inside the container and write output to host path
-pg_dump -U $PGUSER -d $PGDATABASE -h $PGHOST > "$out"
+docker compose exec postgres pg_dump -U $PGUSER $PGDATABASE > $out
 
-echo "Backup written to: $out"
+echo "Backup written to: $out on the host"
 
 # --- Copy to CANFAR ---
 echo "Copying the backup to CANFAR..."
