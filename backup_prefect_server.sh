@@ -7,13 +7,13 @@ PGUSER="prefect"
 
 # --- Backup output to host ---
 OUTDIR="$HOME/prefect-backups"
-
+mkdir -p OUTDIR
 ts="$(date -u +%Y-%m-%dT%H%M%SZ)"
 out="$OUTDIR/prefect-$ts.sql"
 
 echo "Starting PostgreSQL backup..."
 # Run pg_dump inside the container and write output to host path
-docker compose exec postgres pg_dump -U $PGUSER $PGDATABASE > $out
+docker compose exec -T postgres pg_dump -U $PGUSER $PGDATABASE > $out
 
 echo "Backup written to: $out on the host"
 
