@@ -6,7 +6,7 @@ PGDATABASE="prefect"
 PGUSER="prefect"
 
 # --- Backup output to host ---
-OUTDIR="~/prefect-backups"
+OUTDIR="$HOME/prefect-backups"
 
 ts="$(date -u +%Y-%m-%dT%H%M%SZ)"
 out="$OUTDIR/prefect-$ts.sql"
