@@ -331,8 +331,10 @@ def launch_band1_3Dpipeline(database_config_path=None):
         bkpscript = "backup_prefect_server.sh"
         print(f"Prefect database should be backed up. Running {bkpscript}")
         cmd = ["bash", bkpscript]
-        subprocess.run(cmd, check=True, capture_output=True)
-
+        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        print("Backup stdout:\n%s", result.stdout)
+        if result.stderr:
+            print("Backup stderr:\n%s", result.stderr)
     # Check database for band 1 tiles that have been processed by AUSSRC
     # but not yet processed with 3D pipeline
     conn = db.get_database_connection(test=False, database_config_path=database_config_path)
