@@ -28,6 +28,8 @@ def launch_session(run_name, tilenumber, image, cores, ram):
         replicas=1,
         env={},
     )
+    # Print to Prefect logs
+    session.logs(session_id, True)
 
     print("Check sessions at https://ws-uv.canfar.net/skaha/v1/session")
     print(

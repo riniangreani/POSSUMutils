@@ -224,6 +224,8 @@ def launch_download_session(jobname="3dtile-dl"):
         replicas=1,
         env={},
     )
+    # Print to Prefect logs
+    session.logs(session_id, True)
 
     print("Check sessions at https://ws-uv.canfar.net/skaha/v1/session")
     print(
@@ -260,6 +262,8 @@ def launch_create_symlinks(jobname="3dsymlinks"):
         replicas=1,
         env={},
     )
+    # Print to Prefect logs
+    session.logs(session_id, True)
 
     print("Check sessions at https://ws-uv.canfar.net/skaha/v1/session")
     print(

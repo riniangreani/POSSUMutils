@@ -94,6 +94,8 @@ def launch_ingest(tilenumber, band):
         args=args,
         replicas=1,
     )
+    # Print to Prefect logs
+    session.logs(session_id, True)
 
     print("Check sessions at https://ws-uv.canfar.net/skaha/v1/session")
     print(
