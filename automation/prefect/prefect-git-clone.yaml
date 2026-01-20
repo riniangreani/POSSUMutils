@@ -19,20 +19,14 @@ deployments:
     work_pool:
       name: local-pool
       work_queue_name: default
-      job_variables:
-        image: "{{ build-image.image }}"
   - name: 1d-pipeline-partial-tiles
     entrypoint: possum_pipeline_control/control_1D_pipeline_PartialTiles.py:main_flow
     work_pool:
       name: local-pool
       work_queue_name: default
-      job_variables:
-        image: "{{ build-image.image }}"
   - name: refresh-cadc-proxy-pem
     entrypoint: automation/prefect/refresh_cadc_proxy_pem.py:main
     description: 'Handy script to manually refresh cadcproxy.pem from Prefect secret if needed.'
     work_pool:
       name: local-pool
       work_queue_name: default
-      job_variables:
-        image: "{{ build-image.image }}"      
