@@ -2,8 +2,20 @@ prefect-version: null
 name: null
 description: "Deploy prefect flows with the latest POSSUM code from git."
 
-build: null
-push: null
+#build:
+#  - prefect_docker.deployments.steps.build_docker_image:
+#      id: build-image
+#      requires: prefect-docker>=0.3.1
+#      image_name: https://images.canfar.net/harbor/projects/21/repositories/possumpipelineneprefect
+#      tag: latest
+#      dockerfile: auto
+
+#push:
+#  - prefect_docker.deployments.steps.push_docker_image:
+#      requires: prefect-docker>=0.3.1
+#      image_name: "{{ build-image.image_name }}"
+#      tag: "{{ build-image.tag }}"
+
 pull:
   - prefect.deployments.steps.git_clone:
       id: clone-step
