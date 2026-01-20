@@ -1,9 +1,12 @@
 name: Deploy Prefect flow
 
 on:
-  push:
-    branches:
-      - prefect_deploy #TODO: Change to main
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test Prefect deployments'
+        required: false
+        type: boolean
 
 jobs:
   deploy:
