@@ -19,6 +19,8 @@ python -m possum_pipeline_control.test_3dpipeline_job
 @author: Erik Osinga
 """
 
+import os
+
 from dotenv import load_dotenv
 from canfar.sessions import Session
 from possum_pipeline_control.test_database_access import (
@@ -37,7 +39,10 @@ def launch_test_session(jobname="testjob"):
     print("Launching test 3D pipeline session")
     print(f"Command: bash {args}")
 
-    image = "images.canfar.net/cirada/possumpipelineprefect-3.12:v1.16.0"
+    version = os.getenv('VERSION')
+    tag = os.getenv('TAG')
+    image = f"riniangreani/possumutils:{version}:{tag}"
+    #image = f"images.canfar.net/cirada/possumpipelineprefect-{version}:{tag}"
     # could also use flexible resources ?
     session_id = session.create(
         name=jobname.replace(

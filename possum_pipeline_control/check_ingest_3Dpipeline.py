@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 from vos import Client
 import argparse
-from possum_pipeline_control import util
+import os
 
-# from skaha.session import Session
+from possum_pipeline_control import util
 from canfar.sessions import Session
 from automation import database_queries as db
 from prefect import task, flow
@@ -71,7 +71,10 @@ def launch_ingest(tilenumber, band):
     run_name = f"ingest{tilenumber}"
     # optionally :latest for always the latest version (SEEMS TO BE BROKEN)
     # image = "images.canfar.net/cirada/possumpipelineprefect-3.12:latest"
-    image = "images.canfar.net/cirada/possumpipelineprefect-3.12:v1.16.0"
+    version = os.getenv('VERSION')
+    tag = os.getenv('TAG')
+    image = f"riniangreani/possumutils:{version}:{tag}"
+    #image = f"images.canfar.net/cirada/possumpipelineprefect-{version}:{tag}"
     # good default values for ingest script
     cores = 2
     ram = 32  # Check allowed values at canfar.net/science-portal

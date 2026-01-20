@@ -3,10 +3,15 @@ name: Deploy Prefect flow
 on:
   workflow_dispatch:
     inputs:
-      tags:
-        description: 'Test Prefect deployments'
+      tag_name:
+        description: 'The name of the tag to process (e.g. v1.18.0)'
+        required: true
+        type: string
+      python_version:
+        description: 'The python version used in the image name also (e.g. 3.12).'
         required: false
-        type: boolean
+        type: string
+
 
 jobs:
   deploy:
@@ -19,23 +24,22 @@ jobs:
       - name: Log in to Harbor
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.HARBOR_USERNAME }}
-          password: ${{ secrets.HARBOR_PASSWORD }}  
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}  
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
-      - name: Set date for image tag
-        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          python-version: ${{ inputs.python_version }}
       - name: Install Prefect
         run: |
           python -m pip install --upgrade pip
           pip install prefect  
       - name: Prefect Deploy
         env:
-          NOW: ${{ env.NOW }}
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
           PREFECT_API_AUTH_STRING: ${{ secrets.PREFECT_API_AUTH_STRING }}
+          TAG: ${{ inputs.tag_name }}
+          VERSION: ${{ inputs.python_version }}
         run: |
-          prefect deploy --all --prefect-file automation/prefect/prefect-git-clone.yaml build-image.tag=$NOW
+          prefect deploy --all --prefect-file automation/prefect/prefect-git-clone.yaml build-image.tag=$TAG
