@@ -24,6 +24,7 @@ into time-blocked directories.
 """
 import argparse
 import os
+import getpass
 from vos import Client
 import subprocess
 from canfar.sessions import Session
@@ -203,8 +204,9 @@ def check_download_running(jobname="3dtile-dl"):
 
 @task(log_prints=True)
 def launch_download_session(jobname="3dtile-dl"):
+    p1user = getpass.getuser()
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/3d_pipeline_tile_download_ingest.sh"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/3d_pipeline_tile_download_ingest.sh {p1user}"
 
     print("Launching download session")
     print(f"Command: bash {args}")
@@ -242,8 +244,9 @@ def launch_create_symlinks(jobname="3dsymlinks"):
     This sorts the tiles into symbolic links in a much more readable format.
     """
 
+    p1user = p1user = getpass.getuser()
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/create_symlinks.sh"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/create_symlinks.sh {p1user}"
 
     print("Launching symlinks session")
     print(f"Command: bash {args}")

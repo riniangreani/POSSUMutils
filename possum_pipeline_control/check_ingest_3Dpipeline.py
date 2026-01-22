@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from vos import Client
 import argparse
 import os
+import getpass
 
 from possum_pipeline_control import util
 from canfar.sessions import Session
@@ -78,9 +79,9 @@ def launch_ingest(tilenumber, band):
     # good default values for ingest script
     cores = 2
     ram = 32  # Check allowed values at canfar.net/science-portal
-
+    p1user = getpass.getuser()
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/ingest_3Dpipeline_band{band_number}_prefect.sh {tilenumber} {band}"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/ingest_3Dpipeline_band{band_number}_prefect.sh {tilenumber} {band} {p1user}"
 
     print("Launching session")
     print(f"Command: bash {args}")

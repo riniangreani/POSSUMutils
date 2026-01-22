@@ -12,6 +12,7 @@ This script is DEPRECATED. Superseded by launch_download_session() in the module
 """
 
 import os
+import getpass
 from datetime import date
 
 # from skaha.session import Session  # noqa: E402
@@ -39,9 +40,10 @@ def launch_download():
     cores = 2
     ram = 16  # Check allowed values at canfar.net/science-portal
 
+    p1user = getpass.getuser()
     # Template bash/python script to run
     cmd = "bash"
-    args = "/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/3dpipeline_downloadscript.sh"
+    args = "/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/3dpipeline_downloadscript.sh {p1user}"
 
     print("Launching session")
     print(f"Command: {cmd} {args}")

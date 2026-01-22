@@ -19,6 +19,7 @@ that will download the tiles in a CANFAR job and populate the possum.partial_til
 import os
 from dotenv import load_dotenv
 import argparse
+import getpass
 import gspread
 import numpy as np
 import subprocess
@@ -461,8 +462,9 @@ def launch_collate_job():
 
     # e.g. for band 1
     basedir = "/arc/projects/CIRADA/polarimetry/pipeline_runs/partial_tiles/943MHz/"
+    p1user = getpass.getuser()
     # Template bash script to run
-    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/collate_1Dpipeline_PartialTiles.sh {basedir}"
+    args = f"/arc/projects/CIRADA/polarimetry/software/POSSUMutils/cirada_software/collate_1Dpipeline_PartialTiles.sh {basedir} {p1user}"
 
     print("Launching collate job")
     print(f"Command: bash {args}")
