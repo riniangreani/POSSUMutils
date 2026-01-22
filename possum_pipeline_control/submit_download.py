@@ -33,7 +33,7 @@ def launch_download():
     # TODO: there's a bug in CANFAR where the latest tag doesnt work
     version = os.getenv('VERSION')
     tag = os.getenv('TAG')
-    image = f"riniangreani/possumutils:{version}:{tag}"
+    image = "images.canfar.net/cirada/possumpipelineprefect-3.12:v1.16.0"
     #image = f"images.canfar.net/cirada/possumpipelineprefect-{version}:{tag}"
     # good default values for download script
     cores = 2

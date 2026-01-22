@@ -211,7 +211,7 @@ def launch_download_session(jobname="3dtile-dl"):
 
     version = os.getenv('VERSION')
     tag = os.getenv('TAG')
-    image = f"riniangreani/possumutils:{version}:{tag}"
+    image = "images.canfar.net/cirada/possumpipelineprefect-3.12:v1.16.0"
     #image = f"images.canfar.net/cirada/possumpipelineprefect-{version}:{tag}"
     # download can use flexible resources
     session_id = session.create(

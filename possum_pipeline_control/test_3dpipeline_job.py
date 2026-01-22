@@ -41,7 +41,7 @@ def launch_test_session(jobname="testjob"):
 
     version = os.getenv('VERSION')
     tag = os.getenv('TAG')
-    image = f"riniangreani/possumutils:{version}:{tag}"
+    image = "images.canfar.net/cirada/possumpipelineprefect-3.12:v1.16.0"
     #image = f"images.canfar.net/cirada/possumpipelineprefect-{version}:{tag}"
     # could also use flexible resources ?
     session_id = session.create(
