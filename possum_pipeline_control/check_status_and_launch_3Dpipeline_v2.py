@@ -292,12 +292,15 @@ def needs_prefect_sqlite_backup(
     home_path = Path(home_dir).expanduser().resolve()
     backups_dir = home_path / backups_subdir
 
+    print(f'Checking {backups_dir}')
     if not backups_dir.is_dir():
         return True
 
     db_files = [
         p for p in backups_dir.iterdir() if p.is_file() and p.name.endswith(suffix)
     ]
+    
+    print(f'DB files:{db_files}')
     if not db_files:
         return True
 
