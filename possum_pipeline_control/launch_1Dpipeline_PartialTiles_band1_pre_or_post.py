@@ -92,7 +92,8 @@ def launch_session(
     return
 
 
-if __name__ == "__main__":
+@flow(log_prints=True)
+def main_flow():    
     parser = argparse.ArgumentParser(
         description="Launch a 1D pipeline Partial Tiles run"
     )
@@ -137,7 +138,12 @@ if __name__ == "__main__":
         # max 15 characters for run name. SBID+timenow: e.g. 50413-11-39-21
         run_name = f"pre-dl-{SBnumber}"  # makes it clear a 'pre' download job is running. Dont want too many of these.
 
+    prefect_api_url = os.getenv('PREFECT_API_URL')
+    print("About to run CANFAR wrapper with ", prefect_api_url)
     # Check allowed values at canfar.net/science-portal, 10, 20, 30, 40 GB should be allowed
     canfar_wrapper.run_canfar_task_with_polling(launch_session, 
             run_name, field_ID, SBnumber, image, cores, ram, ptype, max_dl_jobs=max_dl_jobs
     )
+
+if __name__ == "__main__":
+    main_flow()    
