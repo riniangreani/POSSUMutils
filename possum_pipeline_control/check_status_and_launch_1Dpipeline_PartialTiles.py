@@ -5,7 +5,7 @@ import subprocess
 import time
 import re
 from automation import database_queries as db
-from possum_pipeline_control import util
+from possum_pipeline_control import util, launch_1Dpipeline_PartialTiles_band1
 from possum_pipeline_control.control_1D_pipeline_PartialTiles import get_open_sessions
 from prefect import task, flow
 from prefect.cache_policies import NO_CACHE
@@ -263,6 +263,7 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
             str(tilenumbers),
             str(SBid),
         ]
+        
     elif band == "1367MHz":
         command = [
             "python",
