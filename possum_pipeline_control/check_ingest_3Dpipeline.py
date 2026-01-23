@@ -121,7 +121,7 @@ def update_status(tile_number, band, status, conn):
         tile_number, band_no, status, "3d_pipeline_ingest", conn
     )
 
-@flow(log_prints=True, retries=3)
+@flow(log_prints=True)
 def ingest_3Dpipeline(band_number=1):
     if band_number == 1:
         band = "943MHz"
