@@ -243,7 +243,7 @@ def field_from_sourcelist_string(srclist_str):
 
     return field_ID
 
-@task(log_prints=True)
+
 def launch_pipeline(field_ID, tilenumbers, SBid, band):
     """
     Launch the appropriate 1D pipeline script based on the band
@@ -279,7 +279,10 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
         raise ValueError(f"Unknown band: {band}")
 
     print(f"Running command: {' '.join(command)}")
-    subprocess.run(command, check=True)
+    result = subprocess.run(command, check=True, capture_output=True)
+    print("Backup stdout:\n%s", result.stdout)
+    if result.stderr:
+        print("Backup stderr:\n%s", result.stderr)
 
 
 @task(log_prints=True)
