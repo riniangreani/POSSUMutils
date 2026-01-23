@@ -40,7 +40,7 @@ def run_canfar_task_with_polling(canfar_task, *args: None):
         if session_id:
             status = poll_canfar(session_id)     # keep polling until it stopped running        
             # print CANFAR logs before we lose them
-            logs_dict = session.logs(session_id, *args).get(session_id)
+            logs_dict = session.logs(session_id).get(session_id)
             print("CANFAR logs from session ", session_id, "\n", logs_dict) 
 
             # check status and handle accordingly
@@ -49,7 +49,7 @@ def run_canfar_task_with_polling(canfar_task, *args: None):
         # loop to retry upon failing
         retry_count += 1
     # We have reached maximum retries here. This should be propagated to Prefect as failure
-    raise RuntimeError(f"CANFAR task failed after {MAX_RETRY} retries. Final status: {status}")    
+    raise RuntimeError(f"CANFAR task failed after {MAX_RETRY} retries.")    
 
 def get_session_status(session_id):
     """
