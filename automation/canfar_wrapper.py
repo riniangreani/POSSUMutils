@@ -41,7 +41,7 @@ def run_canfar_task_with_polling(canfar_task, *args: None):
             status = poll_canfar(session_id)     # keep polling until it stopped running        
             # print CANFAR logs before we lose them
             logs_dict = session.logs(session_id, *args).get(session_id)
-            print("CANFAR logs from session ", session_id, "\n", logs_dict)
+            print("CANFAR logs from session ", session_id, "\n", logs_dict) 
 
             # check status and handle accordingly
             if status in ("Completed", "Succeeded"):
