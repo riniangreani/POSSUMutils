@@ -3,10 +3,13 @@ import os
 import getpass
 # from skaha.session import Session
 from canfar.sessions import Session
+from prefect import flow
+from automation import canfar_wrapper
 
 session = Session()
 
 
+@flow(log_prints=True)
 def launch_session(run_name, tilenumber, image, cores, ram):
     """Launch 3D pipeline run"""
     p1user = p1user = getpass.getuser()
@@ -58,4 +61,7 @@ if __name__ == "__main__":
     cores = 16
     ram = 112  # Check allowed values at canfar.net/science-portal
 
-    launch_session(run_name, tilenumber, image, cores, ram)
+    canfar_wrapper.run_canfar_task_with_polling(
+            launch_session,
+            run_name, tilenumber, image, cores, ram
+    )

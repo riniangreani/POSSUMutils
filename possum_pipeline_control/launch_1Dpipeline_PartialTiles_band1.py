@@ -4,9 +4,9 @@ import os
 import getpass
 
 from datetime import datetime
-
-# from skaha.session import Session
+from prefect import flow
 from canfar.sessions import Session
+from automation import canfar_wrapper
 # from skaha.models import ContainerRegistry
 
 # Shouldnt put these on github...
@@ -23,7 +23,7 @@ def arg_as_list(s):
         raise argparse.ArgumentTypeError('Argument "%s" is not a list' % (s))
     return v
 
-
+@flow(log_prints=True)
 def launch_session(run_name, field_ID, tilenumbers, SBnumber, image, cores, ram):
     """Launch 1D pipeline Partial Tile run"""
     t1, t2, t3, t4 = tilenumbers
@@ -94,5 +94,6 @@ if __name__ == "__main__":
     number_of_tiles = len([t for t in tilenumbers if t != ""])
     ram = 20 * number_of_tiles
     # Check allowed values at canfar.net/science-portal, 10, 20, 30, 40 GB should be allowed
-
-    launch_session(run_name, field_ID, tilenumbers, SBnumber, image, cores, ram)
+    canfar_wrapper.run_canfar_task_with_polling(launch_session,
+            run_name, field_ID, tilenumbers, SBnumber, image, cores, ram
+    )

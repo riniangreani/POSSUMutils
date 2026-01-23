@@ -4,9 +4,10 @@ import os
 import getpass
 from datetime import datetime
 
-# from skaha.session import Session
+from prefect import flow
 from canfar.sessions import Session
 from possum_pipeline_control.control_1D_pipeline_PartialTiles import get_open_sessions
+from automation import canfar_wrapper
 
 """
 Submit a headless job to do either pre-processing or post-processing of 1D Partial Tile Pipeline.
@@ -35,7 +36,7 @@ def arg_as_list(s):
         raise argparse.ArgumentTypeError('Argument "%s" is not a list' % (s))
     return v
 
-
+@flow(log_prints=True)
 def launch_session(
     run_name, field_ID, SBnumber, image, cores, ram, ptype, max_dl_jobs=2
 ):
@@ -137,7 +138,6 @@ if __name__ == "__main__":
         run_name = f"pre-dl-{SBnumber}"  # makes it clear a 'pre' download job is running. Dont want too many of these.
 
     # Check allowed values at canfar.net/science-portal, 10, 20, 30, 40 GB should be allowed
-
-    launch_session(
-        run_name, field_ID, SBnumber, image, cores, ram, ptype, max_dl_jobs=max_dl_jobs
+    canfar_wrapper.run_canfar_task_with_polling(launch_session, 
+            run_name, field_ID, SBnumber, image, cores, ram, ptype, max_dl_jobs=max_dl_jobs
     )
