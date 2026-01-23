@@ -263,9 +263,6 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
             str(tilenumbers),
             str(SBid),
         ]
-        launch_1Dpipeline_PartialTiles_band1.main_flow(field_ID,
-            tilenumbers,
-            SBid)
         
     elif band == "1367MHz":
         command = [
@@ -282,11 +279,11 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
     else:
         raise ValueError(f"Unknown band: {band}")
 
-    # print(f"Running command 1: {' '.join(command)}")
-    # result = subprocess.run(command, check=True, capture_output=True, text=True)
-    # print("Backup stdout:\n", result.stdout)
-    # if result.stderr:
-    #     print("Backup stderr:\n", result.stderr)
+    print(f"Running command 1: {' '.join(command)}")
+    result = subprocess.run(command, check=True, capture_output=True, text=True)
+    print("Backup stdout:\n", result.stdout)
+    if result.stderr:
+        print("Backup stderr:\n", result.stderr)
 
 
 @task(log_prints=True)
