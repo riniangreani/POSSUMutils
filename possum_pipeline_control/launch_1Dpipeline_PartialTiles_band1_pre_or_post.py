@@ -89,7 +89,7 @@ def launch_session(
         f"Check logs at https://ws-uv.canfar.net/skaha/v1/session/{session_id[0]}?view=logs"
     )
 
-    return
+    return session_id
 
 
 @flow(log_prints=True)
