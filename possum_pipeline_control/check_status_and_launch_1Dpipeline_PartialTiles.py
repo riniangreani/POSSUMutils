@@ -243,7 +243,7 @@ def field_from_sourcelist_string(srclist_str):
 
     return field_ID
 
-
+@task(log_prints=True)
 def launch_pipeline(field_ID, tilenumbers, SBid, band):
     """
     Launch the appropriate 1D pipeline script based on the band

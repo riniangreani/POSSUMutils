@@ -120,7 +120,7 @@ def launch_pipeline(tilenumber, band):
         raise ValueError(f"Unknown band: {band}")
 
     print(f"Running command: {' '.join(command)}")
-    subprocess.run(command, check=True)
+    subprocess.run(command, check=True, capture_output=True)
 
 @task(log_prints=True)
 def update_status(tile_number, band, Google_API_token, status):

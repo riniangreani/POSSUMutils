@@ -25,6 +25,7 @@ def run_possum_run_remote(workdir: str) -> None:
         ["possum_run_remote"],
         cwd=workdir,
         check=True,
+        capture_output=True
     )
 
 
@@ -42,6 +43,7 @@ def download_and_ingest_tiles_flow(
     subprocess.run(
         ["setfacl", "-m", f"g:{group_name}:rw", ".ssl/cadcproxy.pem"],
         check=True,
+        capture_output=True
     )
     print(f"Staged CADC certificate to: {staged_cert}")
 
