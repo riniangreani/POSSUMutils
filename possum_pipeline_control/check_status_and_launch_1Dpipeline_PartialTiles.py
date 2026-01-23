@@ -278,11 +278,11 @@ def launch_pipeline(field_ID, tilenumbers, SBid, band):
     else:
         raise ValueError(f"Unknown band: {band}")
 
-    print(f"Running command: {' '.join(command)}")
-    result = subprocess.run(command, check=True, capture_output=True)
-    print("Backup stdout:\n%s", result.stdout)
+    print(f"Running command 1: {' '.join(command)}")
+    result = subprocess.run(command, check=True, capture_output=True, text=True)
+    print("Backup stdout:\n", result.stdout)
     if result.stderr:
-        print("Backup stderr:\n%s", result.stderr)
+        print("Backup stderr:\n", result.stderr)
 
 
 @task(log_prints=True)
