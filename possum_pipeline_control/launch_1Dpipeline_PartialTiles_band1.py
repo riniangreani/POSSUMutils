@@ -57,7 +57,13 @@ def launch_session(run_name, field_ID, tilenumbers, SBnumber, image, cores, ram)
     return
 
 
-if __name__ == "__main__":
+
+
+
+@flow(log_prints=True)
+def main_flow():   
+    prefect_api_url = os.getenv('PREFECT_API_URL')
+    print("About to run CANFAR wrapper with ", prefect_api_url)
     parser = argparse.ArgumentParser(
         description="Launch a 1D pipeline Partial Tiles run"
     )
@@ -97,3 +103,7 @@ if __name__ == "__main__":
     canfar_wrapper.run_canfar_task_with_polling(launch_session,
             run_name, field_ID, tilenumbers, SBnumber, image, cores, ram
     )
+
+
+if __name__ == "__main__":
+   main_flow()

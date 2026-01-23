@@ -135,7 +135,7 @@ def launch_pipeline_command(fieldname, sbid):
     """
     command = f"python -m possum_pipeline_control.launch_1Dpipeline_PartialTiles_band1_pre_or_post {fieldname} {sbid} pre"
     print(f"Executing command: {command}")
-    subprocess.run(command, shell=True, check=True, capture_output=True)
+    subprocess.run(command, shell=True, check=True)
 
 
 def extract_date(entry):

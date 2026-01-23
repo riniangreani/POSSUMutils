@@ -26,6 +26,7 @@ def run_canfar_task_with_polling(canfar_task, *args: None):
     If MAX_RETRY has been exceeded, it will not retry.
     """
     retry_count = 0
+    print("Calling canfar wrapper")
     while retry_count <= MAX_RETRY:
         if retry_count > 0:
             print(f"Retrying CANFAR task...\nRetry attempt: {retry_count}")
