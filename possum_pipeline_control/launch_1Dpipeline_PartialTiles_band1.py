@@ -62,23 +62,6 @@ def launch_session(run_name, field_ID, tilenumbers, SBnumber, image, cores, ram)
 
 @flow(log_prints=True)
 def main_flow(field_ID, tilenumbers, SBnumber):   
-    prefect_api_url = os.getenv('PREFECT_API_URL')
-    print("About to run CANFAR wrapper with ", prefect_api_url)
-    # parser = argparse.ArgumentParser(
-    #     description="Launch a 1D pipeline Partial Tiles run"
-    # )
-    # parser.add_argument(
-    #     "field_ID", type=str, help="The field ID to process, e.g. 1412-28"
-    # )
-    # parser.add_argument(
-    #     "tilenumbers",
-    #     type=arg_as_list,
-    #     help="A list of 4 tile numbers to process. Empty strings for less tilenumbers. e.g. ['8843','8971','',''] ",
-    # )
-    # parser.add_argument("SBnumber", type=int, help="The SB number to process")
-
-    # args = parser.parse_args()
-
     timestr = ((datetime.now().strftime("%d/%m/%Y %H:%M:%S"))[11:]).replace(
         ":", "-"
     )  # ":" is not allowed character
@@ -102,5 +85,22 @@ def main_flow(field_ID, tilenumbers, SBnumber):
     )
 
 
-if __name__ == "__main__":
-   main_flow()
+if __name__ == "__main__":   
+    parser = argparse.ArgumentParser(
+        description="Launch a 1D pipeline Partial Tiles run"
+    )
+    parser.add_argument(
+        "field_ID", type=str, help="The field ID to process, e.g. 1412-28"
+    )
+    parser.add_argument(
+        "tilenumbers",
+        type=arg_as_list,
+        help="A list of 4 tile numbers to process. Empty strings for less tilenumbers. e.g. ['8843','8971','',''] ",
+    )
+    parser.add_argument("SBnumber", type=int, help="The SB number to process")
+
+    args = parser.parse_args()
+    field_ID = args.field_ID
+    tilenumbers = args.tilenumbers
+    SBnumber = args.SBnumber
+    main_flow(field_ID, tilenumbers, SBnumber)

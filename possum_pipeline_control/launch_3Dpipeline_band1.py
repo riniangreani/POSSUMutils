@@ -41,16 +41,11 @@ def launch_session(run_name, tilenumber, image, cores, ram):
     return session_id[0]
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Launch a 3D pipeline run")
-    parser.add_argument("tilenumber", type=int, help="The tile number to process")
-
-    args = parser.parse_args()
-    tilenumber = args.tilenumber
+@flow(log_prints=True)
+def main_flow(tilenumber):
     run_name = (
         f"tile{tilenumber}"  # Run name has to match the working directory on CANFAR
     )
-
     # optionally :latest for always the latest version
     # image = "images.canfar.net/cirada/possumpipelineprefect-3.12:latest"
     version = os.getenv('VERSION')
@@ -65,3 +60,14 @@ if __name__ == "__main__":
             launch_session,
             run_name, tilenumber, image, cores, ram
     )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Launch a 3D pipeline run")
+    parser.add_argument("tilenumber", type=int, help="The tile number to process")
+
+    args = parser.parse_args()
+    tilenumber = args.tilenumber
+    main_flow(tilenumber)
+
+    
