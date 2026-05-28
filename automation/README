@@ -1,12 +1,16 @@
 Config.env must be populated with Prefect details for CANFAR session to connect to Prefect:
 
-PREFECT_API_URL : API URL for the Prefect server
+PREFECT_API_URL : API URL for the Prefect server, e.g. http://127.0.0.1:4200/api
 PREFECT_API_AUTH_STRING : auth string to let us use the Prefect server in CANFAR
+
+The above are needed for Canfar sessions to connect to Prefect.
 
 The rest of the values in config.env are now optional. All the secrets including database details are stored in Prefect server.
 
 1. Github Actions Secrets:
 --------------------------
+These are needed for initial Prefect deployments.
+
 HARBOR_PASSWORD : Harbor registry password to push images to run on Canfar
 HARBOR_USERNAME : Harbor username to push images 
 PREFECT_API_AUTH_STRING : auth string to let us use the Prefect server in the code
