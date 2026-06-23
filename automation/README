@@ -15,11 +15,9 @@ PREFECT_API_URL : IP address of the Prefect server to bypass the OAuth Proxy (Gi
 2. Prefect secrets (under Blocks):
 ----------------------------------
 cadc-proxy-pem | Generate cadcproxy.pem with CANFAR interactive session, and copy the content here. 
-database-host | POSSUM database IP address
-database-name | POSSUM database name
-database-password |  POSSUM database password
-database-port |  POSSUM database port
-database-user |  POSSUM database username
+possum-api-url | POSSUM REST API URL
+possum-api-username | POSSUM portal username with update privileges
+possum-api-password | POSSUM portal password
 possum-status-sheet |  link to POSSUM status Google spreadsheet
 possum-status-token |  Copy the content of the json token to access the possum-status-sheet above
 
