@@ -3,35 +3,33 @@ This class replaces database_queries.py to act as a proxy between the POSSUM dat
 We can no longer directly query the database, so we use the REST API instead.
 """
 import os
-from threading import Lock
 
 import requests
+
 from dotenv import load_dotenv
-
-load_dotenv()
-
+from pathlib import Path
+from prefect.blocks.system import Secret
 
 class PossumApiClient:
-    _instance = None
-    _lock = Lock()
 
-    def __new__(cls):
-        if cls._instance is None:
-            # ensure there is only 1 instance of client
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-
-        return cls._instance
-
-    def __init__(self):
+    def __init__(self, config_file_path: str = None):
         if self._initialized:
             return
+      
+        config_file = Path(config_file_path) if config_file_path else None
 
-        self.base_url = os.environ["POSSUM_API_URL"].rstrip("/")
-        self.username = os.environ["POSSUM_API_USERNAME"]
-        self.password = os.environ["POSSUM_API_PASSWORD"]
+        if config_file is not None and config_file.exists():
+            # if config.env is supplied, we'll use the variables from the file
+            load_dotenv(config_file)
+            self.base_url = os.environ["POSSUM_API_URL"]
+            self.username = os.environ["POSSUM_API_USERNAME"]
+            self.password = os.environ["POSSUM_API_PASSWORD"]
+        if not self.base_url:
+            # otherwise load from Prefect secrets
+            self.base_url = Secret.load("possum-api-url").get()
+        if not self.username or not self.password:
+            self.username = Secret.load("possum-api-username").get()
+            self.password = Secret.load("possum-api-password").get()
 
         self.session = requests.Session()
 
@@ -112,7 +110,13 @@ class PossumApiClient:
         return response
 
     def get(self, endpoint, **kwargs):
-        return self._request("GET", endpoint, **kwargs).json()
+        data = self._request("GET", endpoint, **kwargs).json()
+        # return the data as tuples as it was when we queried the DB directly
+        return [tuple(row.values()) for row in data]
+    
+    def get_json(self, endpoint, **kwargs):
+        # get json as is
+        return  self._request("GET", endpoint, **kwargs).json()
 
     def post(self, endpoint, **kwargs):
         return self._request("POST", endpoint, **kwargs).json()
@@ -126,10 +130,3 @@ class PossumApiClient:
     def delete(self, endpoint, **kwargs):
         return self._request("DELETE", endpoint, **kwargs)
     
-# singleton instance
-client = PossumApiClient()
-
-# usage
-# from api_client import client
-
-# data = client.get("/api/observations/")
