@@ -21,19 +21,10 @@ possum-api-password | POSSUM portal password
 possum-status-sheet |  link to POSSUM status Google spreadsheet
 possum-status-token |  Copy the content of the json token to access the possum-status-sheet above
 
-3. Prefect variables (under Variables):
----------------------------------------
-Optional, only if you'd like to override these values:
-canfar-num-retries | 2 | Number of retries when CANFAR session fails.
-canfar-polling-interval-seconds | 60 | Polling interval (in seconds) to poll CANFAR sessions. 
-
-We need to poll CANFAR periodically because sometimes the sessions silently terminate, and Prefect does not know about it. 
-Now we'll retry before giving up, and raising an error so to propagate as Prefect flow failure, and send Slack notification.
-
 You can still use your own config.env as below to override the production secrets for testing purposes.
 1. Rename config.env.example to config.env.
-2. Enter ausSRC database details in the .env file. 
-3. Enter Google spreadsheet token
-4. Update Google spreadsheet file locations (only if the files are different, e.g. for testing)
+2. Enter Google spreadsheet token
+3. Update Google spreadsheet file locations (only if the files are different, e.g. for testing)
+4. Enter POSSUM REST API URL, username and password for using a test REST API instance.
 
 
