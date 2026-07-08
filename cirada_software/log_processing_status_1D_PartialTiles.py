@@ -51,13 +51,13 @@ def update_partial_tile_1d_pipeline(field_ID, tile_numbers, band, status, conn):
     fieldname = util.get_full_field_name(field_ID, band)
     band_number = util.get_band_number(band)
     conn.patch("/api/1d-pipeline/partial-tiles/update/status/",
-                            {
+                            json={
                             "band_number": band_number,
                             "field_name": fieldname,
                             "tile_numbers": tile_numbers,
                             "status": status,
                             },
-                            format="json")
+            )
     ## TODO: validation in case all tiles have been completed
 
     # # Find the validation file path

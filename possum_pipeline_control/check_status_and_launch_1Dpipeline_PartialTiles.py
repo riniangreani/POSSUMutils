@@ -545,13 +545,13 @@ def launch_band1_1Dpipeline(database_config_path=None):
                     # Update the status to "Running"
                     conn = rest_api.PossumApiClient(database_config_path)
                     conn.patch("/api/1d-pipeline/partial-tiles/update/status/",
-                           {
+                           json={
                             "band_number": band_number,
                             "field_name": field_ID,
                             "tile_numbers": tilenumbers,
                             "status": "Running",
                             },
-                            format="json")
+                        )
                     break
 
         else:

@@ -13,17 +13,22 @@ from prefect.blocks.system import Secret
 class PossumApiClient:
 
     def __init__(self, config_file_path: str = None):
-        if self._initialized:
+        if getattr(self, "_initialized", False):
             return
-      
+
+        self.base_url = None
+        self.username = None
+        self.password = None
+
         config_file = Path(config_file_path) if config_file_path else None
 
         if config_file is not None and config_file.exists():
             # if config.env is supplied, we'll use the variables from the file
             load_dotenv(config_file)
-            self.base_url = os.environ["POSSUM_API_URL"]
-            self.username = os.environ["POSSUM_API_USERNAME"]
-            self.password = os.environ["POSSUM_API_PASSWORD"]
+            self.base_url = os.environ.get("POSSUM_API_URL")
+            self.username = os.environ.get("POSSUM_API_USERNAME")
+            self.password = os.environ.get("POSSUM_API_PASSWORD")
+
         if not self.base_url:
             # otherwise load from Prefect secrets
             self.base_url = Secret.load("possum-api-url").get()
@@ -105,7 +110,15 @@ class PossumApiClient:
                 **kwargs,
             )
 
-        response.raise_for_status()
+        if not response.ok:
+            try:
+                error = response.json().get("error", response.text)
+            except ValueError:
+                error = response.text
+            raise requests.HTTPError(
+                f"{response.status_code} {response.reason}: {error}",
+                response=response,
+            )    
 
         return response
 
