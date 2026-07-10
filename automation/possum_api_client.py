@@ -45,7 +45,7 @@ class PossumApiClient:
 
     def login(self):
         response = self.session.post(
-            f"{self.base_url}/api/token/",
+            url = f"{self.base_url.rstrip('/')}/token/",
             json={
                 "username": self.username,
                 "password": self.password,
@@ -66,7 +66,7 @@ class PossumApiClient:
             return
 
         response = self.session.post(
-            f"{self.base_url}/api/token/refresh/",
+            url = f"{self.base_url.rstrip('/')}/token/refresh/",
             json={"refresh": self.refresh_token},
             timeout=30,
         )
@@ -90,10 +90,11 @@ class PossumApiClient:
 
     def _request(self, method, endpoint, **kwargs):
         self._ensure_authenticated()
+        url = f"{self.base_url.rstrip('/')}/{endpoint.lstrip('/')}"
 
         response = self.session.request(
             method=method,
-            url=f"{self.base_url}{endpoint}",
+            url=url, 
             headers=self._headers(),
             timeout=30,
             **kwargs,
@@ -104,7 +105,7 @@ class PossumApiClient:
 
             response = self.session.request(
                 method=method,
-                url=f"{self.base_url}{endpoint}",
+                url=url,
                 headers=self._headers(),
                 timeout=30,
                 **kwargs,
@@ -125,7 +126,10 @@ class PossumApiClient:
     def get(self, endpoint, **kwargs):
         data = self._request("GET", endpoint, **kwargs).json()
         # return the data as tuples as it was when we queried the DB directly
-        return [tuple(row.values()) for row in data]
+        return [
+            tuple(row.values()) if isinstance(row, dict) else (row,)
+            for row in data
+        ]
     
     def get_json(self, endpoint, **kwargs):
         # get json as is

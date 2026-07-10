@@ -59,7 +59,7 @@ def get_results_per_field_sbid_skip_edges(band_number, conn, verbose=False):
         dict: A dictionary with keys as (field_name, sbid) tuples and boolean values indicating whether
               the conditions are met for the non-edge rows.
     """
-    rows = conn.get(f"/api/1d-pipeline/observations/non-edge-rows/band{band_number}/")
+    rows = conn.get(f"/1d-pipeline/observations/non-edge-rows/band{band_number}/")
     results = {}
 
     # Group the table by 'field_name' and 'sbid'
@@ -83,7 +83,7 @@ def get_results_per_field_sbid(conn, band_number="1", verbose=False):
     If all Partial tiles for a fieldname have been completed boolean=True, otherwise false.
     """
     # Group the table by 'field_name' and 'sbid'
-    results = conn.get(f"/api/1d-pipeline/partial-tiles/complete-partial-tiles/band{band_number}/")
+    results = conn.get(f"/1d-pipeline/partial-tiles/complete-partial-tiles/band{band_number}/")
     field_sbid_dict = {}
     # make dict to get rid of duplicates
     for row in results:
@@ -124,7 +124,7 @@ def get_tiles_for_pipeline_run(db_conn, band_number):
     """
     # Find the tiles that satisfy the conditions
     # (i.e. has an SBID and not yet a '1d_pipeline' status)
-    rows = db_conn.get(f"/api/1d-pipeline/partial-tiles/ready-for-pipeline/band{band_number}/")
+    rows = db_conn.get(f"/1d-pipeline/partial-tiles/ready-for-pipeline/band{band_number}/")
     fields_to_run, SBids_to_run = [], []
     tile1_to_run, tile2_to_run, tile3_to_run, tile4_to_run = [], [], [], []
     if rows:
@@ -346,11 +346,11 @@ def update_validation_status(
     """
     print("Updating partial tile status in the POSSUM pipeline validation sheet.")
     conn = rest_api.PossumApiClient(database_config_path)
-    response = conn.patch("/api/1d-pipeline/observations/update/1d-pipeline-validation/?"
+    response = conn.patch("/1d-pipeline/observations/update/1d-pipeline-validation/?"
                             f"band_number={band_number}&"
                             f"field_name={field_name}&"
                             "status=Running")
-    row_num = response.data.get("rows_updated")
+    row_num = response.get("rows_updated")
 
     if row_num > 0:
         print(
@@ -544,7 +544,7 @@ def launch_band1_1Dpipeline(database_config_path=None):
 
                     # Update the status to "Running"
                     conn = rest_api.PossumApiClient(database_config_path)
-                    conn.patch("/api/1d-pipeline/partial-tiles/update/status/",
+                    conn.patch("/1d-pipeline/partial-tiles/update/status/",
                            json={
                             "band_number": band_number,
                             "field_name": field_ID,

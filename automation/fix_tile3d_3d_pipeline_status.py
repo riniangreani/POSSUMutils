@@ -53,15 +53,15 @@ def run_update_query(
     updated_rows = 0
     for t in tiles:
         response = api.patch(
-            "/api/3d-pipeline/tiles/update/3d_pipeline/",
+            "/3d-pipeline/tiles/update/3d_pipeline/",
             json={
              "band_number": 1,
-             "tile_number":t,
+             "tile_number": t,
              "timestamp": timestamp
             }, #avoid encoding problem in url
         )
         
-        num_rows = response.data.get('rows_updated')
+        num_rows = response.get('rows_updated')
         updated_rows += num_rows
 
     return updated_rows

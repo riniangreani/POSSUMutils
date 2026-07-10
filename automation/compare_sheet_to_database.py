@@ -115,7 +115,7 @@ def get_partial_tiles_database(band_number: int = 1) -> list[tuple]:
         f"Fetching full partial tiles data table for 1D pipeline run for band {band_number} "
         "from the database."
     )
-    rows = conn.get(f"/api/partial_tiles/sbid/band{band_number}/")
+    rows = conn.get(f"/partial_tiles/sbid/band{band_number}/")
     
     return rows
 
@@ -278,7 +278,7 @@ def get_observation_state_validation(band_number: int = 1) -> dict[str, str]:
         dict mapping field_name -> normalised 1d_pipeline_validation state.
     """
     conn = possum_api_client.PossumApiClient()
-    rows = conn.get_json(f"/api/1d-pipeline/observations/single-sb-1d-pipeline/full-table/band{band_number}/")
+    rows = conn.get_json(f"/1d-pipeline/observations/single-sb-1d-pipeline/full-table/band{band_number}/")
     
     state_by_field = {}
     for row in rows:

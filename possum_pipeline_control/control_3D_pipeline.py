@@ -19,7 +19,7 @@ def create_3d_progress_plot():
 
     load_dotenv(dotenv_path="./automation/config.env")
     conn = rest_api.PossumApiClient()
-    rows = conn.get("/api/3d-pipeline/tiles/plotting/band1/")
+    rows = conn.get("/3d-pipeline/tiles/plotting/band1/")
     # tile, "3d_pipeline_val", "3d_val_link", "3d_pipeline_ingest", "3d_pipeline", "cube_state"
     tile3d_table = db.rows_to_table(
         rows,

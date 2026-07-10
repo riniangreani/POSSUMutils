@@ -136,7 +136,7 @@ def update_tile_database(tile_number, band_str, status, test_flag, conn):
     """
     print("Updating POSSUM pipeline validation database")
     band_number = util.get_band_number(band_str)
-    rows = conn.get_json(f"/api/3d-pipeline/tiles/tile-id/band{band_number}/{tile_number}/")
+    rows = conn.get_json(f"/3d-pipeline/tiles/tile-id/band{band_number}/{tile_number}/")
     
     if len(rows) > 0:
         ingest_value = rows[0]["3d_pipeline_ingest"]
@@ -152,10 +152,10 @@ def update_tile_database(tile_number, band_str, status, test_flag, conn):
             )
 
         # Update the status in the '3d_pipeline_ingest' column
-        response = conn.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline_ingest/?band_number={band_number}"
+        response = conn.patch(f"/3d-pipeline/tiles/update/3d_pipeline_ingest/?band_number={band_number}"
                             f"&tile_number={tile_number}"
                             f"&3d_pipeline_ingest={status}")
-        row_num = response.data.get('rows_updated')
+        row_num = response.get('rows_updated')
         if row_num > 0:
             print(
                 f"Updated tile {tile_number} status to {status} in '3d_pipeline_ingest' column."
@@ -269,9 +269,13 @@ def update_status_spreadsheet(tile_number, band, Google_API_token, date):
         print(f"Updated tile {tile_number} status to {date} in '3d_pipeline' column.")
         # Also update the DB
         conn = rest_api.PossumApiClient()
-        conn.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline/?band_number={band_number}&"
-                   f"tile_number={tile_number}&"
-                   f"3d_pipeline={date}")
+        conn.patch(f"/3d-pipeline/tiles/update/3d_pipeline/",
+                    json={
+                        "band_number": band_number,
+                        "tile_number": tile_number,
+                        "timestamp": date
+                    }, #avoid encoding problem in url
+        )
     else:
         print(f"Tile {tile_number} not found in the sheet.")
 

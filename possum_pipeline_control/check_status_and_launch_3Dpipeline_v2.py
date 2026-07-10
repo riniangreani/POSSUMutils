@@ -174,7 +174,7 @@ def update_status(tile_number, band, Google_API_token, status):
         )
         # Also update the DB
         conn = rest_api.PossumApiClient()
-        conn.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
+        conn.patch(f"/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
                    f"&tile_number={tile_number}&3d_pipeline_val={status}")
     else:
         print(f"Tile {tile_number} not found in the sheet.")
@@ -428,7 +428,7 @@ async def launch_band1_3Dpipeline(database_config_path=None):
     # but not yet processed with 3D pipeline
     conn = rest_api.PossumApiClient(database_config_path)
     # We are getting the tiles from the DB instead of the sheet now
-    tile_numbers = conn.get("/api/3d-pipeline/tiles/ready-for-3d/band1/")
+    tile_numbers = conn.get("/3d-pipeline/tiles/ready-for-3d/band1/")
     # tile_numbers is a list of single-element tuples, convert to 1D list
     tile_numbers = [str(tup[0]) for tup in tile_numbers]
 

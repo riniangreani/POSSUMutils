@@ -68,7 +68,7 @@ def update_status(tile_number, band, Google_API_token, status):
         print(f"Updated tile {tile_number} status to {status} in '3d_pipeline' column.")
         # Also update the DB
         conn = rest_api.PossumApiClient()
-        conn.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
+        conn.patch(f"/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
                    f"&tile_number={tile_number}"
                    f"&3d_pipeline_val={status}")
     else:

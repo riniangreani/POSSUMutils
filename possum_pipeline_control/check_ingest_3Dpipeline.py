@@ -37,7 +37,7 @@ def get_tiles_for_ingest(band_number, conn):
     list: A list of tile numbers that satisfy the conditions.
     """
     # Find the tiles that satisfy the conditions
-    return conn.get_json(f"/api/3d-pipeline/tiles/ready_for_ingest/band{band_number}/")
+    return conn.get_json(f"/3d-pipeline/tiles/ready-for-ingest/band{band_number}/")
 
 def get_canfar_tiles(band_number):
     client = Client()
@@ -109,7 +109,7 @@ def update_status(tile_number, band, status, api):
     status (str): The status to set in the '3d_pipeline_ingest' column.
     """
     band_no = util.get_band_number(band)
-    return api.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline_ingest/?band_number={band_no}"
+    return api.patch(f"/3d-pipeline/tiles/update/3d_pipeline_ingest/?band_number={band_no}"
                      f"&tile_number={tile_number}"
                      f"&3d_pipeline_ingest={status}")
     

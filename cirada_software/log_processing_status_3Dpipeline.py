@@ -158,11 +158,11 @@ def update_3d_tile_database(tile_number, band, status):
 
     # execute query
     conn = rest_api.PossumApiClient()
-    response = conn.patch(f"/api/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
+    response = conn.patch(f"/3d-pipeline/tiles/update/3d_pipeline_val/?band_number={band_number}"
                           f"&tile_number={tile_number}"
                           f"&3d_pipeline_val={status}")
-    rows_updated = response.data.get('rows_updated')
-    conn.patch(f"/api/3d-pipeline/tiles/update/3d_val_link/?band_number={band_number}"
+    rows_updated = response.get('rows_updated')
+    conn.patch(f"/3d-pipeline/tiles/update/3d_val_link/?band_number={band_number}"
                f"&tile_number={tile_number}"
                f"&3d_val_link={validation_link}")
 

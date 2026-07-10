@@ -101,7 +101,7 @@ def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
     conn = rest_api.PossumApiClient()
     ready_table = pd.DataFrame(
         conn.get_json(
-            f"/api/1d-pipeline/observations/single-sb-1d-pipeline/fields-ready/band{band_number}/"
+            f"/1d-pipeline/observations/single-sb-1d-pipeline/fields-ready/band{band_number}/"
         )
     )
     # Get rid of the ASKAP- prefix in sbid for easier matching with Google Sheet
@@ -125,7 +125,7 @@ def get_ready_fields(band: str) -> tuple[at.Table, at.Table]:
 
     ## getting full table from the database works also, but its a different table structure than Camerons sheet.
     # full_table: at.Table = pd.DataFrame(
-    #                             conn.get_json(f"/api/1d-pipeline/observations/single-sb-1d-pipeline/full-table/band{band_number}/"))
+    #                             conn.get_json(f"/1d-pipeline/observations/single-sb-1d-pipeline/full-table/band{band_number}/"))
 
     return ready_table, full_table_sheet
 
