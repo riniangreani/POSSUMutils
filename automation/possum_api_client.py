@@ -34,7 +34,7 @@ class PossumApiClient:
             self.base_url = Secret.load("possum-api-url", _sync=True).get()
         if not self.username or not self.password:
             self.username = Secret.load("possum-api-username", _sync=True).get()
-            self.password = Secret.load("possum-api-password").get()
+            self.password = Secret.load("possum-api-password", _sync=True).get()
 
         self.session = requests.Session()
 
